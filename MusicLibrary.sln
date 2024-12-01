@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicLibrary", "MusicLibrary\MusicLibrary.csproj", "{F77D1268-7843-4CFE-8F6A-8B81DD71195A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{F77D1268-7843-4CFE-8F6A-8B81DD71195A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{8601EA0A-5FC6-412C-816B-53CB8B015272}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{14E9FD00-A3EF-44BD-A96A-5863411BB94F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{F77D1268-7843-4CFE-8F6A-8B81DD71195A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F77D1268-7843-4CFE-8F6A-8B81DD71195A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F77D1268-7843-4CFE-8F6A-8B81DD71195A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8601EA0A-5FC6-412C-816B-53CB8B015272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8601EA0A-5FC6-412C-816B-53CB8B015272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8601EA0A-5FC6-412C-816B-53CB8B015272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8601EA0A-5FC6-412C-816B-53CB8B015272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14E9FD00-A3EF-44BD-A96A-5863411BB94F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14E9FD00-A3EF-44BD-A96A-5863411BB94F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14E9FD00-A3EF-44BD-A96A-5863411BB94F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14E9FD00-A3EF-44BD-A96A-5863411BB94F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
