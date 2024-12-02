@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Data.Entities
+﻿namespace Data.Entities
 {
     public class User : BaseEntity
     {
@@ -13,6 +7,7 @@ namespace Data.Entities
         public string Email { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsBlocked { get; set; }
-        public IEnumerable<Review> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Playlist> Playlists { get; set; }
     }
 }
