@@ -2,11 +2,6 @@
 using Data.Entities;
 using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
@@ -17,14 +12,18 @@ namespace Data.Repositories
         {
             _context = context;
         }
-        public Task AddAsync(Playlist entity)
+        public async Task AddAsync(Playlist entity)
         {
-            throw new NotImplementedException();
+            await _context.Playlists.AddAsync(entity);
         }
 
-        public Task DeleteByIdAsync(Guid id)
+        public async Task DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var playlist = await _context.Playlists.FindAsync(id);
+            if (playlist != null)
+            {
+                _context.Playlists.Remove(playlist);
+            }
         }
 
         public async Task<IEnumerable<Playlist>> GetAllAsync()
@@ -33,9 +32,15 @@ namespace Data.Repositories
             return users;
         }
 
-        public Task<IEnumerable<Playlist>> GetAllWithDetailsAsync()
+        public async Task<IEnumerable<Playlist>> GetAllWithDetailsAsync()
         {
-            throw new NotImplementedException();
+            var playlists = await _context.Playlists
+                              .Include(p => p.User)
+                              .Include(p => p.Albums)
+                                .ThenInclude(a => a.Playlists)
+                              .ToListAsync();
+
+            return playlists ?? null;
         }
 
         public async Task<Playlist> GetByIdAsync(Guid id)
@@ -44,14 +49,28 @@ namespace Data.Repositories
             return playlist ?? null;
         }
 
-        public Task<Playlist> GetByIdWithDetailsAsync(Guid id)
+        public async Task<Playlist> GetByIdWithDetailsAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var playlist = await _context.Playlists
+                              .Include(p => p.User)
+                              .Include(p => p.Albums)
+                                .ThenInclude(a => a.Playlists)
+                              .FirstOrDefaultAsync(x => x.Id == id);
+
+            return playlist ?? null;
         }
 
-        public Task UpdateAsync(Playlist entity)
+        public async Task UpdateAsync(Playlist entity)
         {
-            throw new NotImplementedException();
+            if (entity != null)
+            {
+                var playlist = await _context.Playlists.FindAsync(entity.Id);
+                if (playlist != null)
+                {
+                    playlist.Name = entity.Name;
+                    playlist.Description = entity.Description;
+                }
+            }
         }
     }
 }

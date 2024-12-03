@@ -2,11 +2,6 @@
 using Data.Entities;
 using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
@@ -22,9 +17,13 @@ namespace Data.Repositories
             await _context.Users.AddAsync(entity);
         }
 
-        public Task DeleteByIdAsync(Guid id)
+        public async Task DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FindAsync(id);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+            }
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
@@ -44,14 +43,30 @@ namespace Data.Repositories
             return user ?? null;
         }
 
-        public Task<User> GetByIdWithDetailsAsync(Guid id)
+        public async Task<User> GetByIdWithDetailsAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users
+                              .Include(u => u.Reviews)
+                                .ThenInclude(r => r.Album)
+                              .Include(u => u.Playlists)
+                              .FirstOrDefaultAsync(x => x.Id == id);
+
+            return user ?? null;
         }
 
-        public Task UpdateAsync(User entity)
+        public async Task UpdateAsync(User entity)
         {
-            throw new NotImplementedException();
+            if (entity != null)
+            {
+                var user = await _context.Users.FindAsync(entity.Id);
+                if (user != null)
+                {
+                    user.Username = entity.Username;
+                    user.IsAdmin = entity.IsAdmin;
+                    user.IsBlocked = entity.IsBlocked;
+                    user.Password = entity.Password;
+                }
+            }
         }
     }
 }

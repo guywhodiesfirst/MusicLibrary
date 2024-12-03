@@ -2,11 +2,6 @@
 using Data.Entities;
 using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
@@ -17,14 +12,18 @@ namespace Data.Repositories
         {
             _context = context;
         }
-        public Task AddAsync(Review entity)
+        public async Task AddAsync(Review entity)
         {
-            throw new NotImplementedException();
+            await _context.Reviews.AddAsync(entity);
         }
 
-        public Task DeleteByIdAsync(Guid id)
+        public async Task DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var review = await _context.Reviews.FindAsync(id);
+            if (review != null)
+            {
+                _context.Reviews.Remove(review);
+            }
         }
 
         public async Task<IEnumerable<Review>> GetAllAsync()
@@ -39,9 +38,17 @@ namespace Data.Repositories
             return review ?? null;
         }
 
-        public Task UpdateAsync(Review entity)
+        public async Task UpdateAsync(Review entity)
         {
-            throw new NotImplementedException();
+            if (entity != null)
+            {
+                var review = await _context.Reviews.FindAsync(entity.Id);
+                if (review != null)
+                {
+                    review.Rating = entity.Rating;
+                    review.Content = entity.Content;
+                }
+            }
         }
     }
 }
