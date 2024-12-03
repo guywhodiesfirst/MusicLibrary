@@ -59,6 +59,7 @@ namespace Data.Repositories
             var album = await _context.Albums
                               .Include(a => a.Genre)
                               .Include(a => a.Playlists)
+                                .ThenInclude(p => p.Albums)
                               .Include(a => a.Reviews)
                               .FirstOrDefaultAsync(a => a.Id == id);
             

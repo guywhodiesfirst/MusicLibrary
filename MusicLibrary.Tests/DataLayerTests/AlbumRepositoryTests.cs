@@ -16,7 +16,7 @@ namespace MusicLibrary.Tests.DataLayerTests
             using var context = new MusicLibraryDataContext(UnitTestHelper.GetUnitTestDbOptions());
             var albumRepository = new AlbumRepository(context);
             var expected = ExpectedEntities.Albums.FirstOrDefault(x => x.Id == id);
-            
+
             //action
             var album = await albumRepository.GetByIdAsync(id);
 
@@ -81,6 +81,38 @@ namespace MusicLibrary.Tests.DataLayerTests
 
             //assert
             Assert.That(album, Is.EqualTo(albumInDb).Using(new AlbumEqualityComparer()), message: "UpdateAsync works incorrectly");
+        }
+
+        [TestCase("7b0d93e6-9e3d-4e58-9c7b-bc52e0a730af")]
+        [TestCase("285f6c88-dbf2-4dc0-8b82-30a06e125b8c")]
+        [TestCase("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")]
+        public async Task AlbumRepositoryGetByIdWithDetailsAsync(Guid id)
+        {
+            //arrange
+            using var context = new MusicLibraryDataContext(UnitTestHelper.GetUnitTestDbOptions());
+            var albumRepository = new AlbumRepository(context);
+            var expected = ExpectedEntities.Albums.FirstOrDefault(x => x.Id == id);
+
+            //action
+            var album = await albumRepository.GetByIdWithDetailsAsync(id);
+
+
+            //assert
+            Assert.That(album, Is.EqualTo(expected).Using(new AlbumEqualityComparer()), message: "GetByIdWithDetailsAsync works incorrectly");
+
+            if (album != null)
+            {
+                Assert.That(album.Genre,
+                Is.EqualTo(ExpectedEntities.Genres.Single(x => x.Id == expected?.GenreId))
+                    .Using(new GenreEqualityComparer()),
+                    message: "GetByIdWithDetailsAsync doesn't include genre");
+                Assert.That(album.Reviews.ToList(),
+                    Is.EqualTo(ExpectedEntities.Reviews.Where(x => x.AlbumId == album.Id).ToList())
+                    .Using(new ReviewEqualityComparer()),
+                    message: "GetByIdWithDetailsAsync doesn't include reviews");
+                Assert.That(album.Playlists, Has.Count.GreaterThan(0));
+                Assert.That(album.Playlists.Any(playlist => playlist.Albums.Contains(album)), Is.True, "The album should be present in the playlists.");
+            }
         }
     }
 }

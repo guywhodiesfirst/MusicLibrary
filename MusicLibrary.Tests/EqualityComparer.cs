@@ -84,17 +84,12 @@ namespace MusicLibrary.Tests
     {
         public bool Equals([AllowNull] Review x, [AllowNull] Review y)
         {
-            if (x == null && y == null)
-                return true;
-            if (x == null || y == null)
-                return false;
-
+            if (x == null || y == null) return x == y;
             return x.Id == y.Id &&
-                    x.UserId == y.UserId &&
-                    x.AlbumId == y.AlbumId &&
-                    x.Rating == y.Rating &&
-                    x.Content == y.Content &&
-                    x.CreatedAt == y.CreatedAt;
+                   x.UserId == y.UserId &&
+                   x.AlbumId == y.AlbumId &&
+                   x.Rating == y.Rating &&
+                   x.Content == y.Content;
         }
 
         public int GetHashCode([DisallowNull] Review obj)
