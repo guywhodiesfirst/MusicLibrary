@@ -17,9 +17,9 @@ namespace Data.Repositories
         {
             _context = context;
         }
-        public Task AddAsync(User entity)
+        public async Task AddAsync(User entity)
         {
-            throw new NotImplementedException();
+            await _context.Users.AddAsync(entity);
         }
 
         public Task DeleteByIdAsync(Guid id)
@@ -38,9 +38,10 @@ namespace Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<User> GetByIdAsync(Guid id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FindAsync(id);
+            return user ?? null;
         }
 
         public Task<User> GetByIdWithDetailsAsync(Guid id)

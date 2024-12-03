@@ -1,5 +1,7 @@
-﻿using Data.Entities;
+﻿using Data.Data;
+using Data.Entities;
 using Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,11 @@ namespace Data.Repositories
 {
     public class GenreRepository : IGenreRepository
     {
+        private readonly MusicLibraryDataContext _context;
+        public GenreRepository(MusicLibraryDataContext context)
+        {
+            _context = context;
+        }
         public Task AddAsync(Genre entity)
         {
             throw new NotImplementedException();
@@ -20,14 +27,16 @@ namespace Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Genre>> GetAllAsync()
+        public async Task<IEnumerable<Genre>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var users = await _context.Genres.ToListAsync();
+            return users;
         }
 
-        public Task<Genre> GetByIdAsync(Guid id)
+        public async Task<Genre> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var genre = await _context.Genres.FindAsync(id);
+            return genre ?? null;
         }
 
         public Task UpdateAsync(Genre entity)

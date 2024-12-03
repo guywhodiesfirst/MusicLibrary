@@ -1,5 +1,7 @@
-﻿using Data.Entities;
+﻿using Data.Data;
+using Data.Entities;
 using Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,11 @@ namespace Data.Repositories
 {
     public class ReviewRepository : IReviewRepository
     {
+        private readonly MusicLibraryDataContext _context;
+        public ReviewRepository(MusicLibraryDataContext context)
+        {
+            _context = context;
+        }
         public Task AddAsync(Review entity)
         {
             throw new NotImplementedException();
@@ -20,14 +27,16 @@ namespace Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Review>> GetAllAsync()
+        public async Task<IEnumerable<Review>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var users = await _context.Reviews.ToListAsync();
+            return users;
         }
 
-        public Task<Review> GetByIdAsync(Guid id)
+        public async Task<Review> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var review = await _context.Reviews.FindAsync(id);
+            return review ?? null;
         }
 
         public Task UpdateAsync(Review entity)
