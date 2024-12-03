@@ -17,20 +17,24 @@ namespace Data.Repositories
         {
             _context = context;
         }
-        public Task AddAsync(Genre entity)
+        public async Task AddAsync(Genre entity)
         {
-            throw new NotImplementedException();
+            await _context.Genres.AddAsync(entity);
         }
 
-        public Task DeleteByIdAsync(Guid id)
+        public async Task DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var genre = await _context.Genres.FindAsync(id);
+            if (genre != null)
+            {
+                _context.Genres.Remove(genre);
+            }
         }
 
         public async Task<IEnumerable<Genre>> GetAllAsync()
         {
-            var users = await _context.Genres.ToListAsync();
-            return users;
+            var genres = await _context.Genres.ToListAsync();
+            return genres;
         }
 
         public async Task<Genre> GetByIdAsync(Guid id)
@@ -39,9 +43,16 @@ namespace Data.Repositories
             return genre ?? null;
         }
 
-        public Task UpdateAsync(Genre entity)
+        public async Task UpdateAsync(Genre entity)
         {
-            throw new NotImplementedException();
+            if(entity != null)
+            {
+                var genre = await _context.Genres.FindAsync(entity.Id);
+                if (genre != null) 
+                {
+                    genre.Name = entity.Name;
+                }
+            }
         }
     }
 }
