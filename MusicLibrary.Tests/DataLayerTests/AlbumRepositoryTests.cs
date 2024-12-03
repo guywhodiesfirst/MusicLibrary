@@ -15,7 +15,7 @@ namespace MusicLibrary.Tests.DataLayerTests
             //arrange
             using var context = new MusicLibraryDataContext(UnitTestHelper.GetUnitTestDbOptions());
             var albumRepository = new AlbumRepository(context);
-            var expected = ExpectedAlbums.FirstOrDefault(x => x.Id == id);
+            var expected = ExpectedEntities.Albums.FirstOrDefault(x => x.Id == id);
             
             //action
             var album = await albumRepository.GetByIdAsync(id);
@@ -35,7 +35,7 @@ namespace MusicLibrary.Tests.DataLayerTests
             var albums = await albumRepository.GetAllAsync();
 
             //assert
-            Assert.That(albums, Is.EqualTo(ExpectedAlbums).Using(new AlbumEqualityComparer()), message: "GetAllAsync works incorrectly");
+            Assert.That(albums, Is.EqualTo(ExpectedEntities.Albums).Using(new AlbumEqualityComparer()), message: "GetAllAsync works incorrectly");
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace MusicLibrary.Tests.DataLayerTests
             using var context = new MusicLibraryDataContext(UnitTestHelper.GetUnitTestDbOptions());
             var albumRepository = new AlbumRepository(context);
             var unitOfWork = new UnitOfWork(context);
-            var album = ExpectedAlbums.FirstOrDefault();
+            var album = ExpectedEntities.Albums.FirstOrDefault();
             album!.Artists = new List<string> { "Metallica" };
             album.Name = "Master of Puppets";
             album.ReleaseDate = new DateTime(1986, 3, 3);
@@ -82,25 +82,5 @@ namespace MusicLibrary.Tests.DataLayerTests
             //assert
             Assert.That(album, Is.EqualTo(albumInDb).Using(new AlbumEqualityComparer()), message: "UpdateAsync works incorrectly");
         }
-
-        private static IEnumerable<Album> ExpectedAlbums =>
-        [
-            new Album
-            {
-                Id = Guid.Parse("7b0d93e6-9e3d-4e58-9c7b-bc52e0a730af"),
-                Name = "Dark Side of the Moon",
-                Artists = new List<string> {"Pink Floyd"},
-                ReleaseDate = new DateTime(1973, 3, 1),
-                GenreId = Guid.Parse("71bcd091-c2b8-4432-a482-1e3d25b62e4b")
-            },
-            new Album
-            {
-                Id = Guid.Parse("285f6c88-dbf2-4dc0-8b82-30a06e125b8c"),
-                Name = "Thriller",
-                Artists = new List<string> {"Michael Jackson"},
-                ReleaseDate = new DateTime(1982, 11, 30),
-                GenreId = Guid.Parse("d9a6b1f4-7a5f-45d2-bb6e-fc3240ec6a4e")
-            }
-        ];
     }
 }
