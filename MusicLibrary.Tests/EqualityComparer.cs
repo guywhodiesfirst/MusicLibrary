@@ -142,7 +142,7 @@ namespace MusicLibrary.Tests
         }
     }
 
-    internal class CommentComparer : IEqualityComparer<Comment>
+    internal class CommentEqualityComparer : IEqualityComparer<Comment>
     {
         public bool Equals(Comment? x, Comment? y)
         {

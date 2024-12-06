@@ -119,12 +119,14 @@ namespace MusicLibrary.Tests
         [
             new ReviewReaction
             {
+                Id = Guid.Parse("ac869b99-3435-4e57-a34b-2d20ddfda4b1"),
                 ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
                 UserId = Guid.Parse("98c9c918-77f2-4b8b-8df1-55f3eecf74e3"),
                 IsLike = true
             },
             new ReviewReaction
             {
+                Id = Guid.Parse("f04e12e7-fe27-4121-899c-39cf7c89210e"),
                 ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
                 UserId = Guid.Parse("bdbf650b-5551-4aeb-b978-88f7d15c7bcf"),
                 IsLike = false
@@ -135,6 +137,7 @@ namespace MusicLibrary.Tests
         [
             new Comment
             {
+                Id = Guid.Parse("9a81e7a9-2bf8-4ef9-b2c2-81bbcd393908"),
                 ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
                 UserId = Guid.Parse("98c9c918-77f2-4b8b-8df1-55f3eecf74e3"),
                 CreatedAt = DateTime.UtcNow,
@@ -143,6 +146,7 @@ namespace MusicLibrary.Tests
             },
             new Comment
             {
+                Id = Guid.Parse("f3491566-6162-47b3-9f07-726d1a4e719e"),
                 ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
                 UserId = Guid.Parse("bdbf650b-5551-4aeb-b978-88f7d15c7bcf"),
                 CreatedAt = DateTime.UtcNow,
