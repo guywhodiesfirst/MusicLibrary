@@ -79,7 +79,7 @@ namespace MusicLibrary.Tests.DataLayerTests
         }
 
         [TestCase("71bcd091-c2b8-4432-a482-1e3d25b62e4b")]
-        public async Task AlbumRepositoryDeleteByIdAsyncDeletesValue(Guid id)
+        public async Task GenreRepositoryDeleteByIdAsyncDeletesValue(Guid id)
         {
             //arrange
             using var context = new MusicLibraryDataContext(UnitTestHelper.GetUnitTestDbOptions());
