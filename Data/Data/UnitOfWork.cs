@@ -32,6 +32,13 @@ namespace Data.Data
         public IUserRepository UserRepository =>
             _userRepository ??= new UserRepository(_context);
 
+        private IReviewReactionRepository _reviewReactionRepository;
+        public IReviewReactionRepository ReviewReactionRepository =>
+            _reviewReactionRepository ??= new ReviewReactionRepository(_context);
+
+        private ICommentRepository _commentRepository;
+        public ICommentRepository CommentRepository =>
+            _commentRepository ??= new CommentRepository(_context);
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();

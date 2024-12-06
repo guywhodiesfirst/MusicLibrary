@@ -9,5 +9,7 @@
         public bool IsBlocked { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public ICollection<Playlist> Playlists { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+        public ICollection<ReviewReaction> Reactions { get; set; }
     }
 }
