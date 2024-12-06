@@ -1,6 +1,7 @@
 ﻿using Data.Data;
 using Data.Entities;
 using Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
@@ -11,29 +12,44 @@ namespace Data.Repositories
         {
             _context = context;
         }
-        public Task AddAsync(Comment entity)
+        public async Task AddAsync(Comment entity)
         {
-            throw new NotImplementedException();
+            await _context.Comments.AddAsync(entity);
         }
 
-        public Task DeleteByIdAsync(Guid id)
+        public async Task DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var comment = await _context.Comments.FindAsync(id);
+            if (comment != null)
+            {
+                _context.Comments.Remove(comment);
+            }
         }
 
-        public Task<IEnumerable<Comment>> GetAllAsync()
+        public async Task<IEnumerable<Comment>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var comments = await _context.Comments.ToListAsync();
+            return comments ?? null;
         }
 
-        public Task<Comment> GetByIdAsync(Guid id)
+        public async Task<Comment> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var comment = await _context.Comments.FindAsync(id);
+            return comment ?? null;
         }
 
-        public Task UpdateAsync(Comment entity)
+        public async Task UpdateAsync(Comment entity)
         {
-            throw new NotImplementedException();
+            if (entity != null)
+            {
+                var comment = await _context.Comments.FindAsync(entity.Id);
+                if (comment != null)
+                {
+                    comment.Content = entity.Content;
+                    comment.IsDeleted = entity.IsDeleted;
+                    comment.LastUpdatedAt = entity.LastUpdatedAt;
+                }
+            }
         }
     }
 }

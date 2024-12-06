@@ -32,9 +32,17 @@ namespace Data.Repositories
             return users;
         }
 
-        public Task<IEnumerable<User>> GetAllWithDetailsAsync()
+        public async Task<IEnumerable<User>> GetAllWithDetailsAsync()
         {
-            throw new NotImplementedException();
+            var users = await _context.Users
+                              .Include(u => u.Reviews)
+                                .ThenInclude(r => r.Album)
+                              .Include(u => u.Playlists)
+                              .Include(u => u.Comments)
+                              .Include(u => u.Reactions)
+                              .ToListAsync();
+
+            return users ?? null;
         }
 
         public async Task<User> GetByIdAsync(Guid id)
@@ -49,6 +57,8 @@ namespace Data.Repositories
                               .Include(u => u.Reviews)
                                 .ThenInclude(r => r.Album)
                               .Include(u => u.Playlists)
+                              .Include(u => u.Comments)
+                              .Include(u => u.Reactions)
                               .FirstOrDefaultAsync(x => x.Id == id);
 
             return user ?? null;

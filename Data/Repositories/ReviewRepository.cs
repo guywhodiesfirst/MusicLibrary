@@ -47,6 +47,7 @@ namespace Data.Repositories
                 {
                     review.Rating = entity.Rating;
                     review.Content = entity.Content;
+                    review.LastUpdatedAt = entity.LastUpdatedAt;
                 }
             }
         }

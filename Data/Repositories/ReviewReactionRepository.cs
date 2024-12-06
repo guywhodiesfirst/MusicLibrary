@@ -1,6 +1,7 @@
 ﻿using Data.Data;
 using Data.Entities;
 using Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
@@ -11,29 +12,39 @@ namespace Data.Repositories
         {
             _context = context;
         }
-        public Task AddAsync(ReviewReaction entity)
+        public async Task AddAsync(ReviewReaction entity)
         {
-            throw new NotImplementedException();
+            await _context.Reactions.AddAsync(entity);
         }
 
-        public Task DeleteByIdAsync(Guid id)
+        public async Task DeleteByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var reaction = await _context.Reactions.FindAsync(id);
+            if (reaction != null)
+            {
+                _context.Reactions.Remove(reaction);
+            }
         }
 
-        public Task<IEnumerable<ReviewReaction>> GetAllAsync()
+        public async Task<IEnumerable<ReviewReaction>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var reactions = await _context.Reactions.ToListAsync();
+            return reactions ?? null;
         }
 
-        public Task<ReviewReaction> GetByIdAsync(Guid id)
+        public async Task<ReviewReaction> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var reaction = await _context.Reactions.FindAsync(id);
+            return reaction ?? null;
         }
 
-        public Task UpdateAsync(ReviewReaction entity)
+        public async Task UpdateAsync(ReviewReaction entity)
         {
-            throw new NotImplementedException();
+            var reaction = await _context.Reactions.FindAsync(entity.Id);
+            if (reaction != null)
+            {
+                reaction.IsLike = entity.IsLike;
+            }
         }
     }
 }
