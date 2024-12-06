@@ -86,7 +86,7 @@ namespace MusicLibrary.Tests.DataLayerTests
         [TestCase("7b0d93e6-9e3d-4e58-9c7b-bc52e0a730af")]
         [TestCase("285f6c88-dbf2-4dc0-8b82-30a06e125b8c")]
         [TestCase("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")]
-        public async Task AlbumRepositoryGetByIdWithDetailsAsync(Guid id)
+        public async Task AlbumRepositoryGetByIdWithDetailsAsyncReturnsEntity(Guid id)
         {
             //arrange
             using var context = new MusicLibraryDataContext(UnitTestHelper.GetUnitTestDbOptions());
@@ -113,6 +113,23 @@ namespace MusicLibrary.Tests.DataLayerTests
                 Assert.That(album.Playlists, Has.Count.GreaterThan(0));
                 Assert.That(album.Playlists.Any(playlist => playlist.Albums.Contains(album)), Is.True, "The album should be present in the playlists.");
             }
+        }
+
+        [TestCase("7b0d93e6-9e3d-4e58-9c7b-bc52e0a730af")]
+        public async Task AlbumRepositoryDeleteByIdAsyncDeletesValue(Guid id)
+        {
+            //arrange
+            using var context = new MusicLibraryDataContext(UnitTestHelper.GetUnitTestDbOptions());
+            var albumRepository = new AlbumRepository(context);
+            var album = await albumRepository.GetByIdWithDetailsAsync(id);
+         
+            //action
+            await albumRepository.DeleteByIdAsync(id);
+            await context.SaveChangesAsync();
+            bool isAlbumDeleted = (await albumRepository.GetByIdWithDetailsAsync(id) == null);
+
+            //assert
+            Assert.That(isAlbumDeleted, Is.EqualTo(true), message: "The album is still present in the database");
         }
     }
 }
