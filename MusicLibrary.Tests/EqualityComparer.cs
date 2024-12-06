@@ -120,4 +120,46 @@ namespace MusicLibrary.Tests
             return obj.Id.GetHashCode();
         }
     }
+
+    internal class ReviewReactionEqualityComparer : IEqualityComparer<ReviewReaction>
+    {
+        public bool Equals(ReviewReaction? x, ReviewReaction? y)
+        {
+            if (x == null && y == null)
+                return true;
+            if (x == null || y == null)
+                return false;
+
+            return x.IsLike == y.IsLike &&
+                   x.Id == y.Id &&
+                   x.UserId == y.UserId &&
+                   x.ReviewId == y.ReviewId;
+        }
+
+        public int GetHashCode([DisallowNull] ReviewReaction obj)
+        {
+            return obj.Id.GetHashCode();
+        }
+    }
+
+    internal class CommentComparer : IEqualityComparer<Comment>
+    {
+        public bool Equals(Comment? x, Comment? y)
+        {
+            if (x == null && y == null)
+                return true;
+            if (x == null || y == null)
+                return false;
+
+            return x.Id == y.Id &&
+                   x.UserId == y.UserId &&
+                   x.ReviewId == y.ReviewId &&
+                   x.Content == y.Content;
+        }
+
+        public int GetHashCode([DisallowNull] Comment obj)
+        {
+            return obj.Id.GetHashCode();
+        }
+    }
 }

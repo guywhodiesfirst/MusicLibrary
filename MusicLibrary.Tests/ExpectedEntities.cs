@@ -86,7 +86,8 @@ namespace MusicLibrary.Tests
                 AlbumId = Guid.Parse("7b0d93e6-9e3d-4e58-9c7b-bc52e0a730af"),
                 Rating = 5,
                 Content = "Amazing album!",
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                LastUpdatedAt = DateTime.UtcNow
             },
             new Review
             {
@@ -95,7 +96,8 @@ namespace MusicLibrary.Tests
                 AlbumId = Guid.Parse("285f6c88-dbf2-4dc0-8b82-30a06e125b8c"),
                 Rating = 4,
                 Content = "Great album but a bit overrated.",
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                LastUpdatedAt = DateTime.UtcNow
             }
         ];
 
@@ -110,6 +112,42 @@ namespace MusicLibrary.Tests
             {
                 AlbumId = Guid.Parse("285f6c88-dbf2-4dc0-8b82-30a06e125b8c"),
                 PlaylistId = Guid.Parse("bf09353e-89dc-4147-8a87-dce98783d6f8")
+            }
+        ];
+
+        public static IEnumerable<ReviewReaction> ReviewReactions =>
+        [
+            new ReviewReaction
+            {
+                ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
+                UserId = Guid.Parse("98c9c918-77f2-4b8b-8df1-55f3eecf74e3"),
+                IsLike = true
+            },
+            new ReviewReaction
+            {
+                ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
+                UserId = Guid.Parse("bdbf650b-5551-4aeb-b978-88f7d15c7bcf"),
+                IsLike = false
+            }
+        ];
+
+        public static IEnumerable<Comment> Comments =>
+        [
+            new Comment
+            {
+                ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
+                UserId = Guid.Parse("98c9c918-77f2-4b8b-8df1-55f3eecf74e3"),
+                CreatedAt = DateTime.UtcNow,
+                LastUpdatedAt = DateTime.UtcNow,
+                Content = "Great analysis!"
+            },
+            new Comment
+            {
+                ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
+                UserId = Guid.Parse("bdbf650b-5551-4aeb-b978-88f7d15c7bcf"),
+                CreatedAt = DateTime.UtcNow,
+                LastUpdatedAt = DateTime.UtcNow,
+                Content = "go touch some grass man"
             }
         ];
     }

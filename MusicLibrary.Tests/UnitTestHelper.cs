@@ -1,11 +1,6 @@
 ﻿using Data.Data;
 using Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MusicLibrary.Tests
 {
@@ -134,6 +129,44 @@ namespace MusicLibrary.Tests
                 }
             };
             context.AlbumPlaylists.AddRange(albumPlaylists);
+
+            var reviewReactions = new List<ReviewReaction>
+            {
+                new ReviewReaction
+                {
+                    ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
+                    UserId = Guid.Parse("98c9c918-77f2-4b8b-8df1-55f3eecf74e3"),
+                    IsLike = true
+                },
+                new ReviewReaction
+                {
+                    ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
+                    UserId = Guid.Parse("bdbf650b-5551-4aeb-b978-88f7d15c7bcf"),
+                    IsLike = false
+                }
+            };
+            context.Reactions.AddRange(reviewReactions);
+
+            var comments = new List<Comment>
+            {
+                new Comment
+                {
+                    ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
+                    UserId = Guid.Parse("98c9c918-77f2-4b8b-8df1-55f3eecf74e3"),
+                    CreatedAt = DateTime.UtcNow,
+                    LastUpdatedAt = DateTime.UtcNow,
+                    Content = "Great analysis!"
+                },
+                new Comment
+                {
+                    ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
+                    UserId = Guid.Parse("bdbf650b-5551-4aeb-b978-88f7d15c7bcf"),
+                    CreatedAt = DateTime.UtcNow,
+                    LastUpdatedAt = DateTime.UtcNow,
+                    Content = "go touch some grass man"
+                }
+            };
+            context.Comments.AddRange(comments);
 
             context.SaveChanges();
         }
