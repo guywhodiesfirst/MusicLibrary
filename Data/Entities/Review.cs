@@ -5,7 +5,8 @@
         public Guid UserId { get; set; }
         public Guid AlbumId { get; set; }
         public int Rating { get; set; }
-        public int NetVotes { get; set; }
+        public int Likes { get; set; }
+        public int Dislikes { get; set; }
         public string Content { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedAt { get; set; }

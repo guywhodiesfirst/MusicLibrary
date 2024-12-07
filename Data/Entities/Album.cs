@@ -3,6 +3,7 @@
     public class Album : BaseEntity
     {
         public string Name { get; set; }
+        public decimal AverageRating { get; set; }
         public DateTime ReleaseDate { get; set; }
         public Guid GenreId { get; set; }
         public Genre Genre { get; set; }

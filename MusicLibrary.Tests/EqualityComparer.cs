@@ -112,6 +112,7 @@ namespace MusicLibrary.Tests
                     x.Password == y.Password &&
                     x.Email == y.Email &&
                     x.IsAdmin == y.IsAdmin &&
+                    x.About == y.About &&
                     x.IsBlocked == y.IsBlocked;
         }
 

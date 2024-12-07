@@ -7,6 +7,7 @@
         public string Email { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsBlocked { get; set; }
+        public string About { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public ICollection<Playlist> Playlists { get; set; }
         public ICollection<Comment> Comments { get; set; }
