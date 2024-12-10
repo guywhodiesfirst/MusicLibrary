@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Business.Models;
 
 namespace Business.Interfaces
 {
-    public interface IAlbumService
+    public interface IAlbumService : IService<AlbumDto>
     {
+        Task<IEnumerable<AlbumDetailsDto>> GetAllWithDetailsAsync();
+        Task<AlbumDetailsDto> GetByIdWithDetailsAsync();
     }
 }

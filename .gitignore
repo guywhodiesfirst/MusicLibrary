@@ -365,3 +365,4 @@ FodyWeavers.xsd
 /API/appsettings.Development.json
 /API/appsettings.json
 /Data/DataLayerClassDiagram.cd
+/Business/appsettings.json
