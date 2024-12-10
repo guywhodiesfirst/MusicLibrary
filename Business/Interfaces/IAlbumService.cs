@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Business.Interfaces
 {
-    public interface ICrud<TDto> where TDto : class
+    public interface IAlbumService
     {
     }
 }
