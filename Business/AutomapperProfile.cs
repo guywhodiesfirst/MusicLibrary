@@ -23,6 +23,15 @@ namespace Business
                 .ForMember(dto => dto.ReviewIds, a => a.MapFrom(a => a.Reviews.Select(r => r.Id)))
                 .ForMember(dto => dto.PlaylistIds, a => a.MapFrom(a => a.Playlists.Select(p => p.Id)))
                 .ReverseMap();
+
+            CreateMap<Playlist, PlaylistDto>()
+                .ForMember(dto => dto.AlbumCount, p => p.MapFrom(x => x.Albums.Count()))
+                .ReverseMap();
+
+            CreateMap<Playlist, PlaylistDetailsDto>()
+                .ForMember(dto => dto.AlbumCount, p => p.MapFrom(x => x.Albums.Count()))
+                .ForMember(dto => dto.Albums, p => p.MapFrom(x => x.Albums))
+                .ReverseMap();
         }
     }
 }
