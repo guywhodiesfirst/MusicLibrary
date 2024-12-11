@@ -9,7 +9,9 @@ builder.Services.AddHttpClient<IMusicBrainzQueryService, MusicBrainzQueryService
 {
     client.BaseAddress = new Uri(builder.Configuration["MusicBrainz:BaseUrl"]!);
 });
+
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

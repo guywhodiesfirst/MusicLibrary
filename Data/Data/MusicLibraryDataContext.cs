@@ -10,7 +10,6 @@ namespace Data.Data
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        //public DbSet<Genre> Genres { get; set; }
         public DbSet<Album> Albums { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<AlbumPlaylist> AlbumPlaylists { get; set; }

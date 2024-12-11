@@ -41,24 +41,6 @@ namespace MusicLibrary.Tests
         }
     }
 
-    //internal class GenreEqualityComparer : IEqualityComparer<Genre>
-    //{
-    //    public bool Equals([AllowNull] Genre x, [AllowNull] Genre y)
-    //    {
-    //        if (x == null && y == null)
-    //            return true;
-    //        if (x == null || y == null)
-    //            return false;
-
-    //        return x.Id == y.Id && x.Name == y.Name;
-    //    }
-
-    //    public int GetHashCode([DisallowNull] Genre obj)
-    //    {
-    //        return obj.Id.GetHashCode();
-    //    }
-    //}
-
     internal class PlaylistEqualityComparer : IEqualityComparer<Playlist>
     {
         public bool Equals([AllowNull] Playlist x, [AllowNull] Playlist y)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Business.Exceptions;
 using Business.Interfaces;
 using Business.Models;
 using Data.Entities;
@@ -8,18 +9,25 @@ namespace Business.Services
 {
     public class AlbumService : IAlbumService
     {
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMusicBrainzQueryService _musicBrainzQueryService;
-        private readonly IMapper _mapper;
-        public AlbumService(IUnitOfWork unitOfWork, IMapper mapper, IMusicBrainzQueryService musicBrainzQueryService)
+        public AlbumService(IMapper mapper, IUnitOfWork unitOfWork, IMusicBrainzQueryService musicBrainzQueryService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _musicBrainzQueryService = musicBrainzQueryService;
         }
-        public Task AddAsync(AlbumDto model)
+        public async Task AddAsync(AlbumDto model)
         {
-            throw new NotImplementedException();
+            var albumInDb = await _unitOfWork.AlbumRepository.GetByIdAsync(model.Id);
+            if (albumInDb != null)
+            {
+                throw new MusicLibraryException("Album already exists");
+            }
+            var album = _mapper.Map<Album>(model);
+            await _unitOfWork.AlbumRepository.AddAsync(album);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task AddByMusicBrainzIdAsync(Guid id)
@@ -34,42 +42,54 @@ namespace Business.Services
                     album.AverageRating = 0;
                     await _unitOfWork.AlbumRepository.AddAsync(album);
                 }
-                // TODO: implement own exception
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    throw;
+                    throw new MusicLibraryException("Error while trying to find an album: ", ex);
                 }
+                await _unitOfWork.SaveChangesAsync();
             }
         }
 
-        public Task DeleteAsync(Guid modelId)
+        public async Task DeleteAsync(Guid modelId)
         {
-            throw new NotImplementedException();
+            await _unitOfWork.AlbumRepository.DeleteByIdAsync(modelId);
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<AlbumDto>> GetAllAsync()
+        public async Task<IEnumerable<AlbumDto>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var albums = await _unitOfWork.AlbumRepository.GetAllAsync();
+            return albums == null ? Enumerable.Empty<AlbumDto>() : _mapper.Map<IEnumerable<AlbumDto>>(albums);
         }
 
-        public Task<IEnumerable<AlbumDetailsDto>> GetAllWithDetailsAsync()
+        public async Task<IEnumerable<AlbumDetailsDto>> GetAllWithDetailsAsync()
         {
-            throw new NotImplementedException();
+            var albums = await _unitOfWork.AlbumRepository.GetAllWithDetailsAsync();
+            return albums == null ? Enumerable.Empty<AlbumDetailsDto>() : _mapper.Map<IEnumerable<AlbumDetailsDto>>(albums);
         }
 
-        public Task<AlbumDto> GetByIdAsync(Guid id)
+        public async Task<AlbumDto> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var albumInDb = await _unitOfWork.AlbumRepository.GetByIdAsync(id);
+            return albumInDb == null ? throw new MusicLibraryException("Album not found") : _mapper.Map<AlbumDto>(albumInDb);
         }
 
-        public Task<AlbumDetailsDto> GetByIdWithDetailsAsync()
+        public async Task<AlbumDetailsDto> GetByIdWithDetailsAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var albumInDb = await _unitOfWork.AlbumRepository.GetByIdWithDetailsAsync(id);
+            return albumInDb == null ? throw new MusicLibraryException("Album not found") : _mapper.Map<AlbumDetailsDto>(albumInDb);
         }
 
-        public Task UpdateAsync(AlbumDto model)
+        public async Task UpdateAsync(AlbumDto model)
         {
-            throw new NotImplementedException();
+            if (model == null)
+                throw new ArgumentNullException("Model can't be null");
+            var albumInDb = await _unitOfWork.AlbumRepository.GetByIdAsync(model.Id);
+            if(albumInDb == null)
+                throw new MusicLibraryException("Album not found");
+            var album = _mapper.Map<Album>(model);
+            await _unitOfWork.AlbumRepository.UpdateAsync(album);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }
