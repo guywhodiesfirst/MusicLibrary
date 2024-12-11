@@ -18,6 +18,18 @@ namespace Data.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
+                .Property(u => u.Username)
+                .IsRequired(true);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Password)
+                .IsRequired(true);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Email)
+                .IsRequired(true);
+
+            modelBuilder.Entity<User>()
                 .HasMany(u => u.Reviews)
                 .WithOne(r => r.User)
                 .HasForeignKey(r => r.UserId)
@@ -42,6 +54,22 @@ namespace Data.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Album>()
+                .Property(a => a.ReleaseDate)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Album>()
+                .Property(a => a.AverageRating)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Album>()
+                .Property(a => a.Genre)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Album>()
+                .Property(a => a.Name)
+                .IsRequired(true);
+
+            modelBuilder.Entity<Album>()
                 .HasMany(a => a.Reviews)
                 .WithOne(r => r.Album)
                 .HasForeignKey(r => r.AlbumId)
@@ -51,12 +79,6 @@ namespace Data.Data
                 .HasMany(a => a.Playlists)
                 .WithMany(ac => ac.Albums)
                 .UsingEntity<AlbumPlaylist>();
-
-            //modelBuilder.Entity<Genre>()
-            //    .HasMany(g => g.Albums)
-            //    .WithOne(a => a.Genre)
-            //    .HasForeignKey(a => a.GenreId)
-            //    .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Review>()
                 .HasMany(r => r.Comments)
@@ -69,6 +91,14 @@ namespace Data.Data
                 .WithOne(rr => rr.Review)
                 .HasForeignKey(rr => rr.ReviewId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Playlist>()
+                .Property(p => p.Name)
+                .IsRequired(true);
+
+            modelBuilder.Entity<Comment>()
+                .Property(c => c.Content)
+                .IsRequired(true);
         }
     }
 }

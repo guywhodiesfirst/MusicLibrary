@@ -1,10 +1,18 @@
 using Business.Interfaces;
 using Business.Services;
 using Data;
+using Data.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<MusicLibraryDataContext>(options =>
+{
+    options.UseSqlite(
+        builder.Configuration["ConnectionStrings:DefaultConnection"]
+    );
+});
 builder.Services.AddHttpClient<IMusicBrainzQueryService, MusicBrainzQueryService>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["MusicBrainz:BaseUrl"]!);

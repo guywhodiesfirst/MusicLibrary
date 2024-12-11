@@ -44,7 +44,7 @@ namespace Business.Services
                 }
                 catch (Exception ex)
                 {
-                    throw new MusicLibraryException("Error while trying to find an album: ", ex);
+                    throw new MusicLibraryException("Error while trying to add an album: ", ex);
                 }
                 await _unitOfWork.SaveChangesAsync();
             }
