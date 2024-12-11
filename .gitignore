@@ -367,3 +367,5 @@ FodyWeavers.xsd
 /Data/DataLayerClassDiagram.cd
 /Business/appsettings.json
 /API/musicLibrary.db
+/API/musicLibrary.db-shm
+/API/musicLibrary.db-wal

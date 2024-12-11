@@ -10,7 +10,7 @@ namespace Business
         {
             CreateMap<MusicBrainzReleaseGroup, Album>()
                 .ForMember(a => a.Name, mbrg => mbrg.MapFrom(x => x.Title))
-                .ForMember(a => a.Genre, mbrg => mbrg.MapFrom(x => x.Tags.OrderByDescending(t => t.Count).FirstOrDefault()))
+                .ForMember(a => a.Genre, mbrg => mbrg.MapFrom(x => x.Tags.OrderByDescending(t => t.Count).Select(t => t.Name).FirstOrDefault()))
                 .ForMember(a => a.Artists, mbrg => mbrg.MapFrom(x => x.ArtistCredit.Select(ac => ac.Name)))
                 .ForMember(a => a.ReleaseDate, mbrg => mbrg.MapFrom(x => DateTime.Parse(x.FirstReleaseDate)));
 

@@ -26,6 +26,13 @@ namespace Data.Repositories
             }
         }
 
+        public async Task DeleteConnectionsByAlbumIdAsync(Guid albumId)
+        {
+            var connections = await GetConnectionsByAlbumIdAsync(albumId);
+            if (connections != null)
+                _context.RemoveRange(connections);
+        }
+
         public async Task<IEnumerable<Album>> GetAllAsync()
         {
             var album = await _context.Albums.ToListAsync();
@@ -58,6 +65,13 @@ namespace Data.Repositories
                               .FirstOrDefaultAsync(a => a.Id == id);
             
             return album ?? null;
+        }
+
+        public async Task<IEnumerable<AlbumPlaylist>> GetConnectionsByAlbumIdAsync(Guid albumId)
+        {
+            var connections = await _context.AlbumPlaylists.ToListAsync();
+            var connectionsWithAlbum = connections.Where(c => c.AlbumId == albumId);
+            return connectionsWithAlbum ?? null;
         }
 
         public async Task UpdateAsync(Album entity)

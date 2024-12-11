@@ -1,6 +1,9 @@
-﻿namespace Business.Interfaces
+﻿using Business.Models;
+
+namespace Business.Interfaces
 {
-    public interface IReviewService
+    public interface IReviewService : IService<ReviewDto>
     {
+        Task AddAsync(ReviewDto model);
     }
 }

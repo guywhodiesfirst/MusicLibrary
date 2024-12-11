@@ -1,7 +1,8 @@
+using Business;
 using Business.Interfaces;
 using Business.Services;
-using Data;
 using Data.Data;
+using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,10 @@ builder.Services.AddHttpClient<IMusicBrainzQueryService, MusicBrainzQueryService
 {
     client.BaseAddress = new Uri(builder.Configuration["MusicBrainz:BaseUrl"]!);
 });
+
+builder.Services.AddAutoMapper(typeof(AutomapperProfile).Assembly);
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAlbumService, AlbumService>();
 
 builder.Services.AddControllers();
 
