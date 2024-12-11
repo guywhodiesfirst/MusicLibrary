@@ -20,14 +20,14 @@ namespace MusicLibrary.Tests
         }
         public static void SeedData(MusicLibraryDataContext context)
         {
-            var genres = new List<Genre>
-            {
-                new Genre { Id = Guid.Parse("71bcd091-c2b8-4432-a482-1e3d25b62e4b"), Name = "Rock" },
-                new Genre { Id = Guid.Parse("d9a6b1f4-7a5f-45d2-bb6e-fc3240ec6a4e"), Name = "Pop" },
-                new Genre { Id = Guid.Parse("4a7cd7b9-2a53-4e47-b87b-e486aba6f3d3"), Name = "Jazz" },
-                new Genre { Id = Guid.Parse("fc8d5de4-4a15-4a25-a2ad-5078432fd16d"), Name = "Classical" }
-            };
-            context.Genres.AddRange(genres);
+            //var genres = new List<Genre>
+            //{
+            //    new Genre { Id = Guid.Parse("71bcd091-c2b8-4432-a482-1e3d25b62e4b"), Name = "Rock" },
+            //    new Genre { Id = Guid.Parse("d9a6b1f4-7a5f-45d2-bb6e-fc3240ec6a4e"), Name = "Pop" },
+            //    new Genre { Id = Guid.Parse("4a7cd7b9-2a53-4e47-b87b-e486aba6f3d3"), Name = "Jazz" },
+            //    new Genre { Id = Guid.Parse("fc8d5de4-4a15-4a25-a2ad-5078432fd16d"), Name = "Classical" }
+            //};
+            //context.Genres.AddRange(genres);
 
             var albums = new List<Album>
             {
@@ -37,7 +37,7 @@ namespace MusicLibrary.Tests
                     Name = "Dark Side of the Moon",
                     Artists = new List<string> {"Pink Floyd"},
                     ReleaseDate = new DateTime(1973, 3, 1),
-                    GenreId = genres[0].Id
+                    Genre = "art rock"
                 },
                 new Album
                 {
@@ -45,7 +45,7 @@ namespace MusicLibrary.Tests
                     Name = "Thriller",
                     Artists = new List<string> {"Michael Jackson"},
                     ReleaseDate = new DateTime(1982, 11, 30),
-                    GenreId = genres[1].Id
+                    Genre = "pop"
                 }
             };
             context.Albums.AddRange(albums);

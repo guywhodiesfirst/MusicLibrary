@@ -20,9 +20,9 @@ namespace Data.Data
         public IPlaylistRepository PlaylistRepository =>
             _playlistRepository ??= new PlaylistRepository(_context);
 
-        private IGenreRepository _genreRepository;
-        public IGenreRepository GenreRepository =>
-            _genreRepository ??= new GenreRepository(_context);
+        //private IGenreRepository _genreRepository;
+        //public IGenreRepository GenreRepository =>
+        //    _genreRepository ??= new GenreRepository(_context);
 
         private IReviewRepository _reviewRepository;
         public IReviewRepository ReviewRepository =>

@@ -1,8 +1,8 @@
-﻿using Data.Entities;
+﻿//using Data.Entities;
 
-namespace Data.Interfaces
-{
-    public interface IGenreRepository : IRepository<Genre>
-    {
-    }
-}
+//namespace Data.Interfaces
+//{
+//    public interface IGenreRepository : IRepository<Genre>
+//    {
+//    }
+//}

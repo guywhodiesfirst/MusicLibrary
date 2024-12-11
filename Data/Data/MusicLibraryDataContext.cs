@@ -10,7 +10,7 @@ namespace Data.Data
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<Genre> Genres { get; set; }
+        //public DbSet<Genre> Genres { get; set; }
         public DbSet<Album> Albums { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<AlbumPlaylist> AlbumPlaylists { get; set; }
@@ -53,11 +53,11 @@ namespace Data.Data
                 .WithMany(ac => ac.Albums)
                 .UsingEntity<AlbumPlaylist>();
 
-            modelBuilder.Entity<Genre>()
-                .HasMany(g => g.Albums)
-                .WithOne(a => a.Genre)
-                .HasForeignKey(a => a.GenreId)
-                .OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<Genre>()
+            //    .HasMany(g => g.Albums)
+            //    .WithOne(a => a.Genre)
+            //    .HasForeignKey(a => a.GenreId)
+            //    .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Review>()
                 .HasMany(r => r.Comments)

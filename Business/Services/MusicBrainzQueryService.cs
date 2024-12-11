@@ -41,10 +41,11 @@ namespace Business.Services
             {
                 throw new ArgumentException("Search query cannot be empty", nameof(searchQuery));
             }
+
             var nameQuery = Uri.EscapeDataString(searchQuery);
             var requestUrl = $"{_httpClient.BaseAddress}release-group/?query=name:{nameQuery}&fmt=json&limit=10";
             using var response = await _httpClient.GetAsync(requestUrl);
-            response.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode(); // throws an exception if status code is not 200
 
             var responseContent = await response.Content.ReadAsStringAsync();
             var searchResult = JsonSerializer.Deserialize<MusicBrainzSearchResponse>(responseContent, new JsonSerializerOptions

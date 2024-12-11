@@ -14,7 +14,7 @@ namespace MusicLibrary.Tests
             return x.Id == y.Id &&
                     x.Name == y.Name &&
                     x.ReleaseDate == y.ReleaseDate &&
-                    x.GenreId == y.GenreId;
+                    x.Genre == y.Genre;
         }
 
         public int GetHashCode([DisallowNull] Album obj)
@@ -41,23 +41,23 @@ namespace MusicLibrary.Tests
         }
     }
 
-    internal class GenreEqualityComparer : IEqualityComparer<Genre>
-    {
-        public bool Equals([AllowNull] Genre x, [AllowNull] Genre y)
-        {
-            if (x == null && y == null)
-                return true;
-            if (x == null || y == null)
-                return false;
+    //internal class GenreEqualityComparer : IEqualityComparer<Genre>
+    //{
+    //    public bool Equals([AllowNull] Genre x, [AllowNull] Genre y)
+    //    {
+    //        if (x == null && y == null)
+    //            return true;
+    //        if (x == null || y == null)
+    //            return false;
 
-            return x.Id == y.Id && x.Name == y.Name;
-        }
+    //        return x.Id == y.Id && x.Name == y.Name;
+    //    }
 
-        public int GetHashCode([DisallowNull] Genre obj)
-        {
-            return obj.Id.GetHashCode();
-        }
-    }
+    //    public int GetHashCode([DisallowNull] Genre obj)
+    //    {
+    //        return obj.Id.GetHashCode();
+    //    }
+    //}
 
     internal class PlaylistEqualityComparer : IEqualityComparer<Playlist>
     {

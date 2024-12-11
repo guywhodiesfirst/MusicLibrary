@@ -51,7 +51,7 @@ namespace MusicLibrary.Tests.DataLayerTests
                 Name = "American Idiot",
                 Artists = new List<string> { "Green Day" },
                 ReleaseDate = new DateTime(2004, 9, 21),
-                GenreId = Guid.Parse("71bcd091-c2b8-4432-a482-1e3d25b62e4b")
+                Genre = "pop punk"
             };
 
             //action
@@ -102,10 +102,6 @@ namespace MusicLibrary.Tests.DataLayerTests
 
             if (album != null)
             {
-                Assert.That(album.Genre,
-                Is.EqualTo(ExpectedEntities.Genres.Single(x => x.Id == expected?.GenreId))
-                    .Using(new GenreEqualityComparer()),
-                    message: "GetByIdWithDetailsAsync doesn't include genre");
                 Assert.That(album.Reviews.ToList(),
                     Is.EqualTo(ExpectedEntities.Reviews.Where(x => x.AlbumId == album.Id).ToList())
                     .Using(new ReviewEqualityComparer()),

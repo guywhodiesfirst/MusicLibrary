@@ -2,5 +2,7 @@
 {
     public interface IPlaylistService
     {
+        Task AddAlbumToPlaylistById(Guid albumId, Guid playlistId);
+
     }
 }

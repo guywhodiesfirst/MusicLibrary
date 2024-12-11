@@ -35,7 +35,6 @@ namespace Data.Repositories
         public async Task<IEnumerable<Album>> GetAllWithDetailsAsync()
         {
             var albums = await _context.Albums
-                              .Include(a => a.Genre)
                               .Include(a => a.Playlists)
                                 .ThenInclude(p => p.Albums)
                               .Include(a => a.Reviews)
@@ -53,7 +52,6 @@ namespace Data.Repositories
         public async Task<Album> GetByIdWithDetailsAsync(Guid id)
         {
             var album = await _context.Albums
-                              .Include(a => a.Genre)
                               .Include(a => a.Playlists)
                                 .ThenInclude(p => p.Albums)
                               .Include(a => a.Reviews)
@@ -72,7 +70,6 @@ namespace Data.Repositories
                     album.Name = entity.Name;
                     album.Artists = entity.Artists;
                     album.Genre = entity.Genre;
-                    album.GenreId = entity.GenreId;
                     album.ReleaseDate = entity.ReleaseDate;
                 }
             }

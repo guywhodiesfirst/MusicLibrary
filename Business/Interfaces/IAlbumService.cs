@@ -6,5 +6,6 @@ namespace Business.Interfaces
     {
         Task<IEnumerable<AlbumDetailsDto>> GetAllWithDetailsAsync();
         Task<AlbumDetailsDto> GetByIdWithDetailsAsync();
+        Task AddByMusicBrainzIdAsync(Guid id);
     }
 }
