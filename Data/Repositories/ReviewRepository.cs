@@ -17,6 +17,12 @@ namespace Data.Repositories
             await _context.Reviews.AddAsync(entity);
         }
 
+        public async Task<bool> DoesReviewExistAsync(Guid userId, Guid albumId)
+        {
+            var review = await _context.Reviews.FirstOrDefaultAsync(x => x.UserId == userId && x.AlbumId == albumId);
+            return review != null;
+        }
+
         public async Task DeleteByIdAsync(Guid id)
         {
             var review = await _context.Reviews.FindAsync(id);

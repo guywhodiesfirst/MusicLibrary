@@ -20,8 +20,8 @@ namespace Business
 
             CreateMap<Album, AlbumDetailsDto>()
                 .ForMember(dto => dto.ReviewCount, a => a.MapFrom(x => x.Reviews.Count()))
-                .ForMember(dto => dto.ReviewIds, a => a.MapFrom(a => a.Reviews.Select(r => r.Id)))
-                .ForMember(dto => dto.PlaylistIds, a => a.MapFrom(a => a.Playlists.Select(p => p.Id)))
+                .ForMember(dto => dto.ReviewIds, a => a.MapFrom(x => x.Reviews.Select(r => r.Id)))
+                .ForMember(dto => dto.PlaylistIds, a => a.MapFrom(x => x.Playlists.Select(p => p.Id)))
                 .ReverseMap();
 
             CreateMap<Playlist, PlaylistDto>()
@@ -31,6 +31,19 @@ namespace Business
             CreateMap<Playlist, PlaylistDetailsDto>()
                 .ForMember(dto => dto.AlbumCount, p => p.MapFrom(x => x.Albums.Count()))
                 .ForMember(dto => dto.Albums, p => p.MapFrom(x => x.Albums))
+                .ReverseMap();
+
+            CreateMap<User, UserDto>()
+                .ReverseMap();
+
+            CreateMap<Review, ReviewDto>()
+                .ForMember(dto => dto.AlbumName, r => r.MapFrom(x => x.Album.Name))
+                .ReverseMap();
+
+            CreateMap<Review, ReviewDetailsDto>()
+                .ForMember(dto => dto.AlbumName, r => r.MapFrom(x => x.Album.Name))
+                .ForMember(dto => dto.CommentIds, r => r.MapFrom(x => x.Comments.Select(c => c.Id)))
+                .ForMember(dto => dto.ReactionIds, r => r.MapFrom(x => x.Reactions.Select(r => r.Id)))
                 .ReverseMap();
         }
     }

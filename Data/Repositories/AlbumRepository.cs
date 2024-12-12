@@ -67,7 +67,7 @@ namespace Data.Repositories
             return album ?? null;
         }
 
-        public async Task<IEnumerable<AlbumPlaylist>> GetConnectionsByAlbumIdAsync(Guid albumId)
+        private async Task<IEnumerable<AlbumPlaylist>> GetConnectionsByAlbumIdAsync(Guid albumId)
         {
             var connections = await _context.AlbumPlaylists.ToListAsync();
             var connectionsWithAlbum = connections.Where(c => c.AlbumId == albumId);

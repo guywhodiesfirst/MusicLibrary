@@ -6,7 +6,6 @@ namespace Data.Interfaces
     {
         Task<IEnumerable<Album>> GetAllWithDetailsAsync();
         Task<Album> GetByIdWithDetailsAsync(Guid id);
-        Task<IEnumerable<AlbumPlaylist>> GetConnectionsByAlbumIdAsync(Guid playlistId);
         Task DeleteConnectionsByAlbumIdAsync(Guid albumId);
     }
 }

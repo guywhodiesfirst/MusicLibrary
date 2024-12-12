@@ -18,17 +18,6 @@ namespace Business.Services
             _mapper = mapper;
             _musicBrainzQueryService = musicBrainzQueryService;
         }
-        //public async Task AddAsync(AlbumDto model)
-        //{
-        //    var albumInDb = await _unitOfWork.AlbumRepository.GetByIdAsync(model.Id);
-        //    if (albumInDb != null)
-        //    {
-        //        throw new MusicLibraryException("Album already exists");
-        //    }
-        //    var album = _mapper.Map<Album>(model);
-        //    await _unitOfWork.AlbumRepository.AddAsync(album);
-        //    await _unitOfWork.SaveChangesAsync();
-        //}
 
         public async Task AddByMusicBrainzIdAsync(Guid id)
         {

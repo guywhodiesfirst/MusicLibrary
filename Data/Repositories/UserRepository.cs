@@ -45,6 +45,12 @@ namespace Data.Repositories
             return users ?? null;
         }
 
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            var user = await _context.Users.FindAsync(email);
+            return user ?? null;
+        }
+
         public async Task<User> GetByIdAsync(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
