@@ -30,7 +30,7 @@ namespace Data.Repositories
         {
             var connections = await GetConnectionsByAlbumIdAsync(albumId);
             if (connections != null)
-                _context.RemoveRange(connections);
+                _context.AlbumPlaylists.RemoveRange(connections);
         }
 
         public async Task<IEnumerable<Album>> GetAllAsync()

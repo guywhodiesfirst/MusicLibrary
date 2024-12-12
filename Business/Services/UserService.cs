@@ -50,6 +50,12 @@ namespace Business.Services
             return userInDb == null ? throw new MusicLibraryException("User not found") : _mapper.Map<UserDto>(userInDb);
         }
 
+        public async Task<UserDetailsDto> GetByIdWithDetailsAsync(Guid id)
+        {
+            var userInDb = await _unitOfWork.UserRepository.GetByIdWithDetailsAsync(id);
+            return userInDb == null ? throw new MusicLibraryException("User not found") : _mapper.Map<UserDetailsDto>(userInDb);
+        }
+
         public async Task UpdateAsync(UserDto model)
         {
             if (model == null)

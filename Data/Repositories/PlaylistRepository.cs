@@ -12,6 +12,17 @@ namespace Data.Repositories
         {
             _context = context;
         }
+
+        public async Task AddAlbumToPlaylistByIdAsync(Guid albumId, Guid playlistId)
+        {
+            var connection = new AlbumPlaylist
+            {
+                AlbumId = albumId,
+                PlaylistId = playlistId
+            };
+            await _context.AlbumPlaylists.AddAsync(connection);
+        }
+
         public async Task AddAsync(Playlist entity)
         {
             await _context.Playlists.AddAsync(entity);
@@ -24,6 +35,20 @@ namespace Data.Repositories
             {
                 _context.Playlists.Remove(playlist);
             }
+        }
+
+        public async Task DeleteConnectionsByPlaylistIdAsync(Guid playlistId)
+        {
+            var connections = await GetConnectionsByPlaylistIdAsync(playlistId);
+            if (connections != null)
+                _context.AlbumPlaylists.RemoveRange(connections);
+        }
+
+        private async Task<IEnumerable<AlbumPlaylist>> GetConnectionsByPlaylistIdAsync(Guid playlistId)
+        {
+            var connections = await _context.AlbumPlaylists.ToListAsync();
+            var connectionsWithAlbum = connections.Where(c => c.PlaylistId == playlistId);
+            return connectionsWithAlbum ?? null;
         }
 
         public async Task<IEnumerable<Playlist>> GetAllAsync()
@@ -60,6 +85,14 @@ namespace Data.Repositories
             return playlist ?? null;
         }
 
+        public async Task RemoveAlbumFromPlaylistByIdAsync(Guid albumId, Guid playlistId)
+        {
+            var connection = await _context.AlbumPlaylists
+                .FirstOrDefaultAsync(p => p.PlaylistId == playlistId && p.AlbumId == albumId);
+            if(connection != null)
+                _context.AlbumPlaylists.Remove(connection);
+        }
+
         public async Task UpdateAsync(Playlist entity)
         {
             if (entity != null)
@@ -71,6 +104,13 @@ namespace Data.Repositories
                     playlist.Description = entity.Description;
                 }
             }
+        }
+        public async Task<bool> DoesPlaylistContainAlbumAsync(Guid albumId, Guid playlistId)
+        {
+            var connection = await _context.AlbumPlaylists
+                .FirstOrDefaultAsync(p => p.PlaylistId == playlistId && p.AlbumId == albumId);
+
+            return connection != null;
         }
     }
 }
