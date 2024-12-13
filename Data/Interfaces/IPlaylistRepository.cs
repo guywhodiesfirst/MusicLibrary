@@ -8,7 +8,7 @@ namespace Data.Interfaces
         Task<Playlist> GetByIdWithDetailsAsync(Guid id);
         Task AddAlbumToPlaylistByIdAsync(Guid albumId, Guid playlistId);
         Task RemoveAlbumFromPlaylistByIdAsync(Guid albumId, Guid playlistId);
-        Task<bool> DoesPlaylistContainAlbumAsync(Guid albumId, Guid playlistId);
+        Task<AlbumPlaylist> GetAlbumPlaylistConnectionAsync(Guid albumId, Guid playlistId);
         Task DeleteConnectionsByPlaylistIdAsync(Guid playlistId);
     }
 }

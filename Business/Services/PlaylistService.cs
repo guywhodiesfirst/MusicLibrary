@@ -4,6 +4,7 @@ using Business.Interfaces;
 using Business.Models;
 using Data.Entities;
 using Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.Services
 {
@@ -20,8 +21,7 @@ namespace Business.Services
         }
         public async Task AddAlbumToPlaylistByIdAsync(Guid albumId, Guid playlistId)
         {
-            // TODO: refactor the code to make repository return connection and to make service check if it's null
-            bool playlistContainsAlbum = await _unitOfWork.PlaylistRepository.DoesPlaylistContainAlbumAsync(albumId, playlistId);
+            bool playlistContainsAlbum = await DoesPlaylistContainAlbum(albumId, playlistId);
             if (playlistContainsAlbum)
                 throw new MusicLibraryException("Playlist already contains album");
 
@@ -85,7 +85,7 @@ namespace Business.Services
 
         public async Task RemoveAlbumFromPlaylistByIdAsync(Guid albumId, Guid playlistId)
         {
-            bool playlistContainsAlbum = await _unitOfWork.PlaylistRepository.DoesPlaylistContainAlbumAsync(albumId, playlistId);
+            bool playlistContainsAlbum = await DoesPlaylistContainAlbum(albumId, playlistId);
             if (!playlistContainsAlbum)
                 throw new MusicLibraryException("Playlist does not contain album");
 
@@ -103,6 +103,13 @@ namespace Business.Services
             var playlist = _mapper.Map<Playlist>(model);
             await _unitOfWork.PlaylistRepository.UpdateAsync(playlist);
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        private async Task<bool> DoesPlaylistContainAlbum(Guid albumId, Guid playlistId)
+        {
+            var connection = await _unitOfWork.PlaylistRepository.GetAlbumPlaylistConnectionAsync(albumId, playlistId);
+
+            return connection != null;
         }
     }
 }

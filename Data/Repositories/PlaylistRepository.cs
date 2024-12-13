@@ -105,12 +105,13 @@ namespace Data.Repositories
                 }
             }
         }
-        public async Task<bool> DoesPlaylistContainAlbumAsync(Guid albumId, Guid playlistId)
+
+        public async Task<AlbumPlaylist> GetAlbumPlaylistConnectionAsync(Guid albumId, Guid playlistId)
         {
             var connection = await _context.AlbumPlaylists
                 .FirstOrDefaultAsync(p => p.PlaylistId == playlistId && p.AlbumId == albumId);
 
-            return connection != null;
+            return connection ?? null;
         }
     }
 }
