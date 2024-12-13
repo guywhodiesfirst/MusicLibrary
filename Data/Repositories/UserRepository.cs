@@ -47,7 +47,7 @@ namespace Data.Repositories
 
         public async Task<User> GetByEmailAsync(string email)
         {
-            var user = await _context.Users.FindAsync(email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             return user ?? null;
         }
 
@@ -81,6 +81,7 @@ namespace Data.Repositories
                     user.IsAdmin = entity.IsAdmin;
                     user.IsBlocked = entity.IsBlocked;
                     user.Password = entity.Password;
+                    user.About = entity.About;
                 }
             }
         }

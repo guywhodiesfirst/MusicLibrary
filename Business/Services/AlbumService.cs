@@ -43,7 +43,7 @@ namespace Business.Services
         {
             var albumInDb = await _unitOfWork.AlbumRepository.GetByIdAsync(modelId);
             if (albumInDb == null)
-                throw new MusicLibraryException("Album is not present in the database");
+                throw new MusicLibraryException("Album not found");
 
             await _unitOfWork.AlbumRepository.DeleteConnectionsByAlbumIdAsync(modelId);
             await _unitOfWork.AlbumRepository.DeleteByIdAsync(modelId);
@@ -65,13 +65,13 @@ namespace Business.Services
         public async Task<AlbumDto> GetByIdAsync(Guid id)
         {
             var albumInDb = await _unitOfWork.AlbumRepository.GetByIdAsync(id);
-            return albumInDb == null ? throw new MusicLibraryException("Album not found") : _mapper.Map<AlbumDto>(albumInDb);
+            return albumInDb == null ? null : _mapper.Map<AlbumDto>(albumInDb);
         }
 
         public async Task<AlbumDetailsDto> GetByIdWithDetailsAsync(Guid id)
         {
             var albumInDb = await _unitOfWork.AlbumRepository.GetByIdWithDetailsAsync(id);
-            return albumInDb == null ? throw new MusicLibraryException("Album not found") : _mapper.Map<AlbumDetailsDto>(albumInDb);
+            return albumInDb == null ? null : _mapper.Map<AlbumDetailsDto>(albumInDb);
         }
 
         //public async Task UpdateAsync(AlbumDto model)

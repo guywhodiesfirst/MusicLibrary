@@ -18,10 +18,15 @@ namespace Business.Services
         }
         public async Task AddAsync(UserDto model)
         {
-            var userInDb = _unitOfWork.UserRepository.GetByEmailAsync(model.Email);
+            // TODO: add model validation
+            var userInDb = await _unitOfWork.UserRepository.GetByEmailAsync(model.Email);
             if (userInDb != null)
+            {
+                Console.WriteLine("блять");
                 throw new MusicLibraryException("User already exists!");
+            }
             
+            // TODO: add password hashing
             model.Id = Guid.NewGuid();
             var user = _mapper.Map<User>(model);
             await _unitOfWork.UserRepository.AddAsync(user);
@@ -30,7 +35,7 @@ namespace Business.Services
 
         public async Task DeleteAsync(Guid modelId)
         {
-            var userInDb = _unitOfWork.UserRepository.GetByIdAsync(modelId);
+            var userInDb = await _unitOfWork.UserRepository.GetByIdAsync(modelId);
             if (userInDb == null)
                 throw new MusicLibraryException("User does not exist");
 
@@ -53,13 +58,13 @@ namespace Business.Services
         public async Task<UserDto> GetByIdAsync(Guid id)
         {
             var userInDb = await _unitOfWork.UserRepository.GetByIdAsync(id);
-            return userInDb == null ? throw new MusicLibraryException("User not found") : _mapper.Map<UserDto>(userInDb);
+            return userInDb == null ? null : _mapper.Map<UserDto>(userInDb);
         }
 
         public async Task<UserDetailsDto> GetByIdWithDetailsAsync(Guid id)
         {
             var userInDb = await _unitOfWork.UserRepository.GetByIdWithDetailsAsync(id);
-            return userInDb == null ? throw new MusicLibraryException("User not found") : _mapper.Map<UserDetailsDto>(userInDb);
+            return userInDb == null ? null : _mapper.Map<UserDetailsDto>(userInDb);
         }
 
         public async Task UpdateAsync(UserDto model)
