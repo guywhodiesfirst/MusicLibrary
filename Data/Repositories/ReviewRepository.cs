@@ -57,5 +57,16 @@ namespace Data.Repositories
             var review = await _context.Reviews.FirstOrDefaultAsync(x => x.UserId == userId && x.AlbumId == albumId);
             return review ?? null;
         }
+
+        public async Task<Review> GetByIdWithDetailsAsync(Guid id)
+        {
+            var review = await _context.Reviews
+                              .Include(r => r.Comments)
+                                .ThenInclude(c => c.User)
+                              .Include(r => r.Reactions)
+                              .FirstOrDefaultAsync(r => r.Id == id);
+
+            return review ?? null;
+        }
     }
 }

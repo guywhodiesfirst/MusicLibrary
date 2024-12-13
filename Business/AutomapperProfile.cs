@@ -15,7 +15,6 @@ namespace Business
                 .ForMember(a => a.ReleaseDate, mbrg => mbrg.MapFrom(x => DateTime.Parse(x.FirstReleaseDate)));
 
             CreateMap<Album, AlbumDto>()
-                .ForMember(dto => dto.ReviewCount, a => a.MapFrom(x => x.Reviews.Count()))
                 .ReverseMap();
 
             CreateMap<Album, AlbumDetailsDto>()

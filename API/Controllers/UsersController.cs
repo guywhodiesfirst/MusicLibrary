@@ -40,6 +40,7 @@ namespace API.Controllers
             return result == null ? NotFound("User not found") : Ok(result);
         }
 
+        // POST: api/users
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] UserDto model)
         {
@@ -69,11 +70,11 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(UserDto user)
+        public async Task<IActionResult> Update(UserDto model)
         {
             try
             {
-                await _userService.UpdateAsync(user);
+                await _userService.UpdateAsync(model);
                 return Ok();
             }
             catch (Exception ex)

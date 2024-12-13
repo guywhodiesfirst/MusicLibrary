@@ -28,7 +28,6 @@ namespace Business.Services
                 {
                     var musicBrainzAlbum = await _musicBrainzQueryService.GetAlbumByIdAsync(id);
                     var album = _mapper.Map<Album>(musicBrainzAlbum);
-                    album.AverageRating = 0;
                     await _unitOfWork.AlbumRepository.AddAsync(album);
                 }
                 catch (Exception ex)
@@ -52,7 +51,7 @@ namespace Business.Services
 
         public async Task<IEnumerable<AlbumDto>> GetAllAsync()
         {
-            var albums = await _unitOfWork.AlbumRepository.GetAllAsync();
+            var albums = await _unitOfWork.AlbumRepository.GetAllWithDetailsAsync();
             return albums == null ? Enumerable.Empty<AlbumDto>() : _mapper.Map<IEnumerable<AlbumDto>>(albums);
         }
 
@@ -64,7 +63,7 @@ namespace Business.Services
 
         public async Task<AlbumDto> GetByIdAsync(Guid id)
         {
-            var albumInDb = await _unitOfWork.AlbumRepository.GetByIdAsync(id);
+            var albumInDb = await _unitOfWork.AlbumRepository.GetByIdWithDetailsAsync(id);
             return albumInDb == null ? null : _mapper.Map<AlbumDto>(albumInDb);
         }
 
@@ -72,6 +71,15 @@ namespace Business.Services
         {
             var albumInDb = await _unitOfWork.AlbumRepository.GetByIdWithDetailsAsync(id);
             return albumInDb == null ? null : _mapper.Map<AlbumDetailsDto>(albumInDb);
+        }
+
+        public async Task UpdateAlbumRatingByIdAsync(Guid id)
+        {
+            var album = await _unitOfWork.AlbumRepository.GetByIdWithDetailsAsync(id);
+            decimal newRating = (decimal)album.Reviews.Average(x => x.Rating);
+            album.AverageRating = newRating;
+            await _unitOfWork.AlbumRepository.UpdateAsync(album);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         //public async Task UpdateAsync(AlbumDto model)

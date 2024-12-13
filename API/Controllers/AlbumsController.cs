@@ -24,7 +24,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(404, $"An error occurred while processing your request: {ex.Message}");
+                return NotFound(ex.Message);
             }
         }
 
@@ -60,6 +60,7 @@ namespace API.Controllers
             return result == null ? NotFound("Album not found") : Ok(result);
         }
 
+        // DELETE: api/albums/{id}
         [HttpDelete("id")]
         public async Task<IActionResult> Delete(Guid id)
         {

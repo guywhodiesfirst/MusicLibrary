@@ -19,22 +19,16 @@ namespace Data.Data
         {
             modelBuilder.Entity<User>()
                 .Property(u => u.Username)
-                .IsRequired(true);
+                .IsRequired();
 
             modelBuilder.Entity<User>()
                 .Property(u => u.Password)
-                .IsRequired(true);
+                .IsRequired();
 
             modelBuilder.Entity<User>()
                 .Property(u => u.Email)
-                .IsRequired(true);
+                .IsRequired();
 
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Reviews)
-                .WithOne(r => r.User)
-                .HasForeignKey(r => r.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Playlists)
                 .WithOne(ac => ac.User)
@@ -67,13 +61,7 @@ namespace Data.Data
 
             modelBuilder.Entity<Album>()
                 .Property(a => a.Name)
-                .IsRequired(true);
-
-            modelBuilder.Entity<Album>()
-                .HasMany(a => a.Reviews)
-                .WithOne(r => r.Album)
-                .HasForeignKey(r => r.AlbumId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .IsRequired();
 
             modelBuilder.Entity<Album>()
                 .HasMany(a => a.Playlists)
@@ -94,11 +82,21 @@ namespace Data.Data
 
             modelBuilder.Entity<Playlist>()
                 .Property(p => p.Name)
-                .IsRequired(true);
+                .IsRequired();
 
             modelBuilder.Entity<Comment>()
                 .Property(c => c.Content)
-                .IsRequired(true);
+                .IsRequired();
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+            optionsBuilder
+                .LogTo(Console.WriteLine)   // Логування до консолі
+                .EnableSensitiveDataLogging()  // Дозволяє бачити SQL-запити для відлагодження
+                .UseSqlite("DataSource=musicLibrary.db"); // Замініть на вашу реальну строку підключення
         }
     }
 }

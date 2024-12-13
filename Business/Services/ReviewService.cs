@@ -36,9 +36,15 @@ namespace Business.Services
                     throw;
                 }
             }
-
+            var album = await _unitOfWork.AlbumRepository.GetByIdAsync(model.AlbumId);
             model.Id = Guid.NewGuid();
             var review = _mapper.Map<Review>(model);
+            review.CreatedAt = DateTime.Now;
+            review.LastUpdatedAt = DateTime.Now;
+            review.Likes = 0;
+            review.Dislikes = 0;
+            review.Album = _mapper.Map<Album>(album);
+
             await _unitOfWork.ReviewRepository.AddAsync(review);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -68,7 +74,13 @@ namespace Business.Services
         public async Task<ReviewDto> GetByIdAsync(Guid id)
         {
             var reviewInDb = await _unitOfWork.ReviewRepository.GetByIdAsync(id);
-            return reviewInDb == null ? throw new MusicLibraryException("Review not found") : _mapper.Map<ReviewDto>(reviewInDb);
+            return reviewInDb == null ? null : _mapper.Map<ReviewDto>(reviewInDb);
+        }
+
+        public async Task<ReviewDetailsDto> GetByIdWithDetailsAsync(Guid modelId)
+        {
+            var reviewInDb = await _unitOfWork.ReviewRepository.GetByIdWithDetailsAsync(modelId);
+            return reviewInDb == null ? null : _mapper.Map<ReviewDetailsDto>(reviewInDb);
         }
 
         public async Task UpdateAsync(ReviewDto model)

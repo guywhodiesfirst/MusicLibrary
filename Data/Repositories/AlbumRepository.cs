@@ -14,6 +14,7 @@ namespace Data.Repositories
         }
         public async Task AddAsync(Album entity)
         {
+            entity.AverageRating = 0;
             await _context.Albums.AddAsync(entity);
         }
 

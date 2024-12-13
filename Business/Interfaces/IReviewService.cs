@@ -7,6 +7,7 @@ namespace Business.Interfaces
         Task AddAsync(ReviewDto model);
         Task UpdateAsync(ReviewDto model);
         Task<bool> DoesReviewExistByIdAsync(Guid modelId);
+        Task<ReviewDetailsDto> GetByIdWithDetailsAsync(Guid modelId);
         // TODO: add reaction methods 
     }
 }
