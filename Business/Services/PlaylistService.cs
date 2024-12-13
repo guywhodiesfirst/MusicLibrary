@@ -4,7 +4,6 @@ using Business.Interfaces;
 using Business.Models;
 using Data.Entities;
 using Data.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace Business.Services
 {

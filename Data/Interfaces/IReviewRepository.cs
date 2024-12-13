@@ -4,6 +4,6 @@ namespace Data.Interfaces
 {
     public interface IReviewRepository : IRepository<Review>
     {
-        Task<bool> DoesReviewExistAsync(Guid userId, Guid albumId);
+        Task<Review> GetByUserAlbumIdAsync(Guid userId, Guid albumId);
     }
 }

@@ -38,6 +38,12 @@ namespace Business.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
+        public async Task<bool> DoesUserExistByIdAsync(Guid id)
+        {
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
+            return user != null;
+        }
+
         public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
             var users = await _unitOfWork.UserRepository.GetAllAsync();

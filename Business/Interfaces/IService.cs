@@ -5,6 +5,5 @@
         Task<IEnumerable<TDto>> GetAllAsync();
         Task<TDto> GetByIdAsync(Guid id);
         Task DeleteAsync(Guid modelId);
-        Task UpdateAsync(TDto model);
     }
 }

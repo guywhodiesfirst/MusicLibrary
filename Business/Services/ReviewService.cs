@@ -11,16 +11,31 @@ namespace Business.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        public ReviewService(IMapper mapper, IUnitOfWork unitOfWork)
+        private readonly IAlbumService _albumService;
+        public ReviewService(IMapper mapper, IUnitOfWork unitOfWork, IAlbumService albumService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _albumService = albumService;
         }
         public async Task AddAsync(ReviewDto model)
         {
-            bool reviewExists = await _unitOfWork.ReviewRepository.DoesReviewExistAsync(model.UserId, model.AlbumId);
+            bool reviewExists = await DoesReviewExistByUserAlbumIdAsync(model.UserId, model.AlbumId);
             if (reviewExists)
                 throw new MusicLibraryException("Review already exists!");
+
+            bool albumExists = await _unitOfWork.AlbumRepository.GetByIdAsync(model.AlbumId) != null;
+            if (!albumExists)
+            {
+                try
+                {
+                    await _albumService.AddByMusicBrainzIdAsync(model.AlbumId);
+                }
+                catch
+                {
+                    throw;
+                }
+            }
 
             model.Id = Guid.NewGuid();
             var review = _mapper.Map<Review>(model);
@@ -30,12 +45,18 @@ namespace Business.Services
 
         public async Task DeleteAsync(Guid modelId)
         {
-            var reviewInDb = _unitOfWork.ReviewRepository.GetByIdAsync(modelId);
-            if (reviewInDb == null)
+            bool reviewExists = await _unitOfWork.ReviewRepository.GetByIdAsync(modelId) != null;
+            if (!reviewExists)
                 throw new MusicLibraryException("Review does not exist");
 
             await _unitOfWork.ReviewRepository.DeleteByIdAsync(modelId);
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<bool> DoesReviewExistByIdAsync(Guid modelId)
+        {
+            var review = await _unitOfWork.ReviewRepository.GetByIdAsync(modelId);
+            return review != null;
         }
 
         public async Task<IEnumerable<ReviewDto>> GetAllAsync()
@@ -60,6 +81,12 @@ namespace Business.Services
             var review = _mapper.Map<Review>(model);
             await _unitOfWork.ReviewRepository.UpdateAsync(review);
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        private async Task<bool> DoesReviewExistByUserAlbumIdAsync(Guid userId, Guid albumId)
+        {
+            var reviewInDb = await _unitOfWork.ReviewRepository.GetByUserAlbumIdAsync(userId, albumId);
+            return reviewInDb != null;
         }
     }
 }

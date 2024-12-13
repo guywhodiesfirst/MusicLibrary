@@ -74,16 +74,16 @@ namespace Business.Services
             return albumInDb == null ? throw new MusicLibraryException("Album not found") : _mapper.Map<AlbumDetailsDto>(albumInDb);
         }
 
-        public async Task UpdateAsync(AlbumDto model)
-        {
-            if (model == null)
-                throw new ArgumentNullException("Model can't be null");
-            var albumInDb = await _unitOfWork.AlbumRepository.GetByIdAsync(model.Id);
-            if(albumInDb == null)
-                throw new MusicLibraryException("Album not found");
-            var album = _mapper.Map<Album>(model);
-            await _unitOfWork.AlbumRepository.UpdateAsync(album);
-            await _unitOfWork.SaveChangesAsync();
-        }
+        //public async Task UpdateAsync(AlbumDto model)
+        //{
+        //    if (model == null)
+        //        throw new ArgumentNullException("Model can't be null");
+        //    var albumInDb = await _unitOfWork.AlbumRepository.GetByIdAsync(model.Id);
+        //    if(albumInDb == null)
+        //        throw new MusicLibraryException("Album not found");
+        //    var album = _mapper.Map<Album>(model);
+        //    await _unitOfWork.AlbumRepository.UpdateAsync(album);
+        //    await _unitOfWork.SaveChangesAsync();
+        //}
     }
 }

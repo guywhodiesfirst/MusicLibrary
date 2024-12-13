@@ -90,19 +90,19 @@ namespace API.Controllers
         }
 
         // PUT: api/albums/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(AlbumDto album)
-        {
-            try
-            {
-                await _albumService.UpdateAsync(album);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"An error occurred while processing your request: {ex.Message}");
-            }
-        }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> UpdateAsync(AlbumDto album)
+        //{
+        //    try
+        //    {
+        //        await _albumService.UpdateAsync(album);
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"An error occurred while processing your request: {ex.Message}");
+        //    }
+        //}
 
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteByIdAsync(Guid id)
