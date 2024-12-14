@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Business.Exceptions;
 using Business.Interfaces;
-using Business.Models;
+using Business.Models.Albums;
 using Data.Entities;
 using Data.Interfaces;
 
@@ -32,6 +32,7 @@ namespace Business.Services
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                     throw new MusicLibraryException("Error while trying to add an album: ", ex);
                 }
                 await _unitOfWork.SaveChangesAsync();

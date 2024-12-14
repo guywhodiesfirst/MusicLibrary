@@ -1,4 +1,4 @@
-﻿namespace Business.Models
+﻿namespace Business.Models.Reviews
 {
     public class ReviewDetailsDto : BaseDto
     {

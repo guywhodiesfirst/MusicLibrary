@@ -1,4 +1,4 @@
-﻿namespace Business.Models
+﻿namespace Business.Models.Users
 {
     public class UserDto : BaseDto
     {

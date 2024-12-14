@@ -38,17 +38,6 @@ namespace Data.Data
             _commentRepository ??= new CommentRepository(_context);
         public async Task SaveChangesAsync()
         {
-            foreach (var entry in _context.ChangeTracker.Entries())
-            {
-                if (entry.State == EntityState.Added || entry.State == EntityState.Modified)
-                {
-                    Console.WriteLine($"Entity: {entry.Entity.GetType().Name}, State: {entry.State}");
-                    foreach (var property in entry.Properties)
-                    {
-                        Console.WriteLine($"Property: {property.Metadata.Name}, Value: {property.CurrentValue}");
-                    }
-                }
-            }
             await _context.SaveChangesAsync();
         }
     }

@@ -1,4 +1,4 @@
-﻿using Business.Models;
+﻿using Business.Models.Users;
 
 namespace Business.Interfaces
 {

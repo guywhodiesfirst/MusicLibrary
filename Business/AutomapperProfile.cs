@@ -1,5 +1,10 @@
 ﻿using AutoMapper;
-using Business.Models;
+using Business.Models.Albums;
+using Business.Models.Comments;
+using Business.Models.MusicBrainz;
+using Business.Models.Playlists;
+using Business.Models.Reviews;
+using Business.Models.Users;
 using Data.Entities;
 
 namespace Business
@@ -12,7 +17,7 @@ namespace Business
                 .ForMember(a => a.Name, mbrg => mbrg.MapFrom(x => x.Title))
                 .ForMember(a => a.Genre, mbrg => mbrg.MapFrom(x => x.Tags.OrderByDescending(t => t.Count).Select(t => t.Name).FirstOrDefault()))
                 .ForMember(a => a.Artists, mbrg => mbrg.MapFrom(x => x.ArtistCredit.Select(ac => ac.Name)))
-                .ForMember(a => a.ReleaseDate, mbrg => mbrg.MapFrom(x => DateTime.Parse(x.FirstReleaseDate)));
+                .ForMember(a => a.ReleaseDate, mbrg => mbrg.MapFrom(x => ParseReleaseDate(x.FirstReleaseDate)));
 
             CreateMap<Album, AlbumDto>()
                 .ReverseMap();
@@ -46,10 +51,15 @@ namespace Business
 
             CreateMap<Review, ReviewDto>()
                 .ForMember(dto => dto.AlbumName, r => r.MapFrom(x => x.Album.Name))
+                .ForMember(dto => dto.Username, r => r.MapFrom(x => x.User.Username))
+                .ReverseMap();
+
+            CreateMap<Review, ReviewCreateDto>()
                 .ReverseMap();
 
             CreateMap<Review, ReviewDetailsDto>()
                 .ForMember(dto => dto.AlbumName, r => r.MapFrom(x => x.Album.Name))
+                .ForMember(dto => dto.Username, r => r.MapFrom(x => x.User.Username))
                 .ForMember(dto => dto.CommentIds, r => r.MapFrom(x => x.Comments.Select(c => c.Id)))
                 .ForMember(dto => dto.ReactionIds, r => r.MapFrom(x => x.Reactions.Select(r => r.Id)))
                 .ReverseMap();
@@ -60,6 +70,19 @@ namespace Business
             CreateMap<Comment, CommentDto>()
                 .ForMember(dto => dto.Username, c => c.MapFrom(x => x.User.Username))
                 .ReverseMap();
+        }
+        private static DateTime? ParseReleaseDate(string dateString)
+        {
+            if (string.IsNullOrWhiteSpace(dateString))
+                return null;
+
+            if (dateString.Length == 4 && int.TryParse(dateString, out var year))
+                return new DateTime(year, 1, 1);
+
+            if (DateTime.TryParse(dateString, out var date))
+                return date;
+
+            return null;
         }
     }
 }

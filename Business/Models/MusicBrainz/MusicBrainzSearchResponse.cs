@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Business.Models
+namespace Business.Models.MusicBrainz
 {
     public class MusicBrainzSearchResponse
     {

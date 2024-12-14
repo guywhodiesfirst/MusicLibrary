@@ -1,12 +1,9 @@
 ﻿using Business.Interfaces;
-using Business.Models;
-using Business.Services;
-using Microsoft.AspNetCore.Http;
+using Business.Models.Reviews;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/reviews")]
     [ApiController]
     public class ReviewsController : ControllerBase
     {
@@ -16,8 +13,8 @@ namespace API.Controllers
             _reviewService = reviewService;
         }
 
-        // GET: api/reviews
-        [HttpGet]
+        // GET: api/albums/reviews
+        [HttpGet("api/reviews")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _reviewService.GetAllAsync();
@@ -25,7 +22,7 @@ namespace API.Controllers
         }
 
         // GET: api/reviews/{id}
-        [HttpGet("{id}")]
+        [HttpGet("api/reviews/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _reviewService.GetByIdAsync(id);
@@ -33,17 +30,18 @@ namespace API.Controllers
         }
 
         // GET: api/reviews/{id}/details
-        [HttpGet("{id}/details")]
+        [HttpGet("api/reviews/{id}/details")]
         public async Task<IActionResult> GetByIdWithDetails(Guid id)
         {
             var result = await _reviewService.GetByIdWithDetailsAsync(id);
             return result == null ? NotFound("Review not found") : Ok(result);
         }
 
-        // POST: api/reviews
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] ReviewDto model)
+        // POST: "api/albums/{albumId}/reviews"
+        [HttpPost("api/albums/{albumId}/reviews")]
+        public async Task<IActionResult> Add(Guid albumId, [FromBody] ReviewCreateDto model)
         {
+            model.AlbumId = albumId;
             try
             {
                 await _reviewService.AddAsync(model);
@@ -57,7 +55,7 @@ namespace API.Controllers
         }
 
         // DELETE: api/reviews/{id}
-        [HttpDelete("{id}")]
+        [HttpDelete("api/reviews/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -72,9 +70,10 @@ namespace API.Controllers
         }
 
         // PUT: api/reviews/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(ReviewDto model)
+        [HttpPut("api/reviews/{id}")]
+        public async Task<IActionResult> Update(Guid id, ReviewUpdateDto model)
         {
+            model.Id = id;
             try
             {
                 await _reviewService.UpdateAsync(model);

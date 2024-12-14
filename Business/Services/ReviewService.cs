@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Business.Exceptions;
 using Business.Interfaces;
-using Business.Models;
+using Business.Models.Reviews;
 using Data.Entities;
 using Data.Interfaces;
 
@@ -18,11 +18,15 @@ namespace Business.Services
             _mapper = mapper;
             _albumService = albumService;
         }
-        public async Task AddAsync(ReviewDto model)
+        public async Task AddAsync(ReviewCreateDto model)
         {
             bool reviewExists = await DoesReviewExistByUserAlbumIdAsync(model.UserId, model.AlbumId);
             if (reviewExists)
                 throw new MusicLibraryException("Review already exists!");
+
+            var userInDb = await _unitOfWork.UserRepository.GetByIdAsync(model.UserId);
+            if (userInDb == null)
+                throw new MusicLibraryException("User not found");
 
             bool albumExists = await _unitOfWork.AlbumRepository.GetByIdAsync(model.AlbumId) != null;
             if (!albumExists)
@@ -37,8 +41,8 @@ namespace Business.Services
                 }
             }
             var album = await _unitOfWork.AlbumRepository.GetByIdAsync(model.AlbumId);
-            model.Id = Guid.NewGuid();
             var review = _mapper.Map<Review>(model);
+            review.Id = Guid.NewGuid();
             review.CreatedAt = DateTime.Now;
             review.LastUpdatedAt = DateTime.Now;
             review.Likes = 0;
@@ -67,8 +71,9 @@ namespace Business.Services
 
         public async Task<IEnumerable<ReviewDto>> GetAllAsync()
         {
-            var reviews = await _unitOfWork.ReviewRepository.GetAllAsync();
-            return reviews == null ? Enumerable.Empty<ReviewDto>() : _mapper.Map<IEnumerable<ReviewDto>>(reviews);
+            var reviews = await _unitOfWork.ReviewRepository.GetAllWithDetailsAsync();
+            return reviews == null ? Enumerable.Empty<ReviewDto>() : 
+                _mapper.Map<IEnumerable<ReviewDto>>(reviews.OrderBy(r => r.LastUpdatedAt));
         }
 
         public async Task<ReviewDto> GetByIdAsync(Guid id)
@@ -83,14 +88,19 @@ namespace Business.Services
             return reviewInDb == null ? null : _mapper.Map<ReviewDetailsDto>(reviewInDb);
         }
 
-        public async Task UpdateAsync(ReviewDto model)
+        public async Task UpdateAsync(ReviewUpdateDto model)
         {
             if (model == null)
                 throw new ArgumentNullException("Model can't be null");
-            var userInDb = await _unitOfWork.ReviewRepository.GetByIdAsync(model.Id);
-            if (userInDb == null)
-                throw new MusicLibraryException("User not found");
-            var review = _mapper.Map<Review>(model);
+
+            var review = await _unitOfWork.ReviewRepository.GetByIdAsync(model.Id);
+            if (review == null)
+                throw new ArgumentNullException("Review does not exist");
+
+            review.LastUpdatedAt = DateTime.UtcNow;
+            review.Content = model.Content;
+            review.Rating = model.Rating;
+
             await _unitOfWork.ReviewRepository.UpdateAsync(review);
             await _unitOfWork.SaveChangesAsync();
         }

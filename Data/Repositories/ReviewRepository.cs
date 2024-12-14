@@ -61,12 +61,27 @@ namespace Data.Repositories
         public async Task<Review> GetByIdWithDetailsAsync(Guid id)
         {
             var review = await _context.Reviews
+                              .Include(r => r.User)
+                              .Include(r => r.Album)
                               .Include(r => r.Comments)
                                 .ThenInclude(c => c.User)
                               .Include(r => r.Reactions)
                               .FirstOrDefaultAsync(r => r.Id == id);
 
             return review ?? null;
+        }
+
+        public async Task<IEnumerable<Review>> GetAllWithDetailsAsync()
+        {
+            var reviews = await _context.Reviews
+                                .Include(r => r.User)
+                                .Include(r => r.Album)
+                                .Include(r => r.Comments)
+                                    .ThenInclude(c => c.User)
+                                .Include(r => r.Reactions)
+                                .ToListAsync();
+
+            return reviews ?? null;
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using Business.Models;
+﻿using Business.Models.Reviews;
 
 namespace Business.Interfaces
 {
     public interface IReviewService : IService<ReviewDto>
     {
-        Task AddAsync(ReviewDto model);
-        Task UpdateAsync(ReviewDto model);
+        Task AddAsync(ReviewCreateDto model);
+        Task UpdateAsync(ReviewUpdateDto model);
         Task<bool> DoesReviewExistByIdAsync(Guid modelId);
         Task<ReviewDetailsDto> GetByIdWithDetailsAsync(Guid modelId);
         // TODO: add reaction methods 

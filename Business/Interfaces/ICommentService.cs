@@ -1,4 +1,4 @@
-﻿using Business.Models;
+﻿using Business.Models.Comments;
 
 namespace Business.Interfaces
 {

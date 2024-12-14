@@ -1,4 +1,4 @@
-﻿namespace Business.Models
+﻿namespace Business.Models.Albums
 {
     public class AlbumDetailsDto : BaseDto
     {

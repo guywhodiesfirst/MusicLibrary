@@ -1,4 +1,8 @@
-﻿namespace Business.Models
+﻿using Business.Models.Comments;
+using Business.Models.Playlists;
+using Business.Models.Reviews;
+
+namespace Business.Models.Users
 {
     public class UserDetailsDto : BaseDto
     {

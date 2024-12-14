@@ -6,5 +6,6 @@ namespace Data.Interfaces
     {
         Task<Review> GetByUserAlbumIdAsync(Guid userId, Guid albumId);
         Task<Review> GetByIdWithDetailsAsync(Guid id);
+        Task<IEnumerable<Review>> GetAllWithDetailsAsync();
     }
 }

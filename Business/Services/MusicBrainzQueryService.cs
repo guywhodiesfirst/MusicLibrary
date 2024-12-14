@@ -1,5 +1,5 @@
 ﻿using Business.Interfaces;
-using Business.Models;
+using Business.Models.MusicBrainz;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
 using System.Text.Json;

@@ -1,4 +1,4 @@
-﻿using Business.Models;
+﻿using Business.Models.Albums;
 
 namespace Business.Interfaces
 {

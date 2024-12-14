@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Business.Exceptions;
 using Business.Interfaces;
-using Business.Models;
+using Business.Models.Playlists;
 using Data.Entities;
 using Data.Interfaces;
 
