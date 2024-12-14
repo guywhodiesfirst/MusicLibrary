@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    // TODO: method to get playlists by user
     [ApiController]
     public class PlaylistsController : ControllerBase
     {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    // TODO: methods to get reviews by album and by user
     [ApiController]
     public class ReviewsController : ControllerBase
     {

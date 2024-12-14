@@ -11,7 +11,6 @@ namespace Data.Entities
         public string Content { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime LastUpdatedAt { get; set; }
         public Review Review { get; set; }
         public User User { get; set; }
     }

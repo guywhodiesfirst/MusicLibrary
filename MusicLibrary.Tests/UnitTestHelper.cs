@@ -148,7 +148,6 @@ namespace MusicLibrary.Tests
                     ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
                     UserId = Guid.Parse("98c9c918-77f2-4b8b-8df1-55f3eecf74e3"),
                     CreatedAt = DateTime.UtcNow,
-                    LastUpdatedAt = DateTime.UtcNow,
                     Content = "Great analysis!"
                 },
                 new Comment
@@ -157,7 +156,6 @@ namespace MusicLibrary.Tests
                     ReviewId = Guid.Parse("28f31c22-76d2-4b99-a3d7-420de3b0f527"),
                     UserId = Guid.Parse("bdbf650b-5551-4aeb-b978-88f7d15c7bcf"),
                     CreatedAt = DateTime.UtcNow,
-                    LastUpdatedAt = DateTime.UtcNow,
                     Content = "go touch some grass man"
                 }
             };

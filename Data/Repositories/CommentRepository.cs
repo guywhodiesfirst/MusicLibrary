@@ -28,13 +28,17 @@ namespace Data.Repositories
 
         public async Task<IEnumerable<Comment>> GetAllAsync()
         {
-            var comments = await _context.Comments.ToListAsync();
+            var comments = await _context.Comments
+                                    .Include(c => c.User)
+                                    .ToListAsync();
             return comments ?? null;
         }
 
         public async Task<Comment> GetByIdAsync(Guid id)
         {
-            var comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments
+                                    .Include(c => c.User)
+                                    .FirstOrDefaultAsync(x => x.Id == id);
             return comment ?? null;
         }
 
@@ -47,7 +51,6 @@ namespace Data.Repositories
                 {
                     comment.Content = entity.Content;
                     comment.IsDeleted = entity.IsDeleted;
-                    comment.LastUpdatedAt = entity.LastUpdatedAt;
                 }
             }
         }

@@ -53,7 +53,6 @@ namespace MusicLibrary.Tests.DataLayerTests
                 Content = "I don't completely agree with you but I respect your opinion",
                 IsDeleted = false,
                 CreatedAt = DateTime.Now,
-                LastUpdatedAt = DateTime.Now
             };
 
             //action

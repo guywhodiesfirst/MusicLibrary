@@ -22,16 +22,19 @@ namespace Business.Services
         }
         public async Task AddAsync(CommentDto model)
         {
-            bool reviewExists = await _reviewService.DoesReviewExistByIdAsync(model.Id);
-            if (!reviewExists)
+            var review = await _unitOfWork.ReviewRepository.GetByIdAsync(model.ReviewId);
+            if (review == null)
                 throw new MusicLibraryException("Review does not exist");
 
-            bool userExists = await _userService.DoesUserExistByIdAsync(model.Id);
-            if (!userExists)
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(model.UserId);
+            if (user == null)
                 throw new MusicLibraryException("User does not exist");
 
             model.Id = Guid.NewGuid();
             var comment = _mapper.Map<Comment>(model);
+            comment.CreatedAt = DateTime.Now;
+            comment.User = user;
+            comment.Review = review;
             await _unitOfWork.CommentRepository.AddAsync(comment);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -48,14 +51,14 @@ namespace Business.Services
 
         public async Task<IEnumerable<CommentDto>> GetAllAsync()
         {
-            var comments = await _unitOfWork.ReviewRepository.GetAllAsync();
+            var comments = await _unitOfWork.CommentRepository.GetAllAsync();
             return comments == null ? Enumerable.Empty<CommentDto>() : _mapper.Map<IEnumerable<CommentDto>>(comments);
         }
 
         public async Task<CommentDto> GetByIdAsync(Guid id)
         {
             var commentInDb = await _unitOfWork.CommentRepository.GetByIdAsync(id);
-            return commentInDb == null ? throw new MusicLibraryException("Comment not found") : _mapper.Map<CommentDto>(commentInDb);
+            return commentInDb == null ? null : _mapper.Map<CommentDto>(commentInDb);
         }
     }
 }

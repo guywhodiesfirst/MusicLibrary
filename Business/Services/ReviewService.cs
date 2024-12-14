@@ -47,7 +47,7 @@ namespace Business.Services
             review.LastUpdatedAt = DateTime.Now;
             review.Likes = 0;
             review.Dislikes = 0;
-            review.Album = _mapper.Map<Album>(album);
+            review.Album = album;
 
             await _unitOfWork.ReviewRepository.AddAsync(review);
             await _albumService.UpdateAlbumRatingByIdAsync(review.AlbumId);
