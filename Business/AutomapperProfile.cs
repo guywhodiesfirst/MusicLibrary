@@ -69,7 +69,7 @@ namespace Business
                 .ForMember(dto => dto.ReactionIds, r => r.MapFrom(x => x.Reactions.Select(r => r.Id)))
                 .ReverseMap();
 
-            CreateMap<Review, ReviewReactionDto>()
+            CreateMap<ReviewReaction, ReviewReactionDto>()
                 .ReverseMap();
 
             CreateMap<Comment, CommentDto>()

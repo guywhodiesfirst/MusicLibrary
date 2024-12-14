@@ -34,7 +34,16 @@ namespace Data.Repositories
 
         public async Task<ReviewReaction> GetByIdAsync(Guid id)
         {
-            var reaction = await _context.Reactions.FindAsync(id);
+            var reaction = await _context.Reactions
+                                    .Include(rr => rr.User)
+                                    .Include(rr => rr.Review)
+                                    .FirstOrDefaultAsync(rr => rr.Id == id);
+            return reaction ?? null;
+        }
+
+        public async Task<ReviewReaction> GetByUserReviewIdAsync(Guid userId, Guid reviewId)
+        {
+            var reaction = await _context.Reactions.FirstOrDefaultAsync(rr => rr.UserId == userId && rr.ReviewId == reviewId);
             return reaction ?? null;
         }
 

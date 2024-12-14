@@ -54,6 +54,24 @@ namespace Business.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
+        public async Task AddReactionAsync(ReviewReactionDto reactionModel)
+        {
+            await ValidateReactionAsync(reactionModel.UserId, reactionModel.ReviewId);
+            var reactionInDb = await _unitOfWork.ReviewReactionRepository
+                .GetByUserReviewIdAsync(reactionModel.UserId, reactionModel.ReviewId);
+            if (reactionInDb != null)
+                throw new MusicLibraryException("Reaction already added");
+
+            var reaction = _mapper.Map<ReviewReaction>(reactionModel);
+            reaction.Id = Guid.NewGuid();
+            await _unitOfWork.ReviewReactionRepository.AddAsync(reaction);
+
+            var review = await _unitOfWork.ReviewRepository.GetByIdWithDetailsAsync(reactionModel.ReviewId);
+            await UpdateReviewLikesDislikes(review);
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(Guid modelId)
         {
             bool reviewExists = await _unitOfWork.ReviewRepository.GetByIdAsync(modelId) != null;
@@ -61,6 +79,19 @@ namespace Business.Services
                 throw new MusicLibraryException("Review does not exist");
 
             await _unitOfWork.ReviewRepository.DeleteByIdAsync(modelId);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task DeleteReactionAsync(Guid reactionId)
+        {
+            var reactionInDb = await _unitOfWork.ReviewReactionRepository
+                .GetByIdAsync(reactionId);
+            if (reactionInDb == null)
+                throw new MusicLibraryException("Reaction not found");
+
+            var review = reactionInDb.Review;
+            await _unitOfWork.ReviewReactionRepository.DeleteByIdAsync(reactionId);
+            await UpdateReviewLikesDislikes(review);
             await _unitOfWork.SaveChangesAsync();
         }
 
@@ -107,10 +138,43 @@ namespace Business.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
+        public async Task UpdateReactionAsync(Guid reactionId)
+        {
+            var reactionInDb = await _unitOfWork.ReviewReactionRepository
+                .GetByIdAsync(reactionId);
+            if (reactionInDb == null)
+                throw new MusicLibraryException("Reaction not found");
+
+            reactionInDb.IsLike = !reactionInDb.IsLike;
+
+            var review = await _unitOfWork.ReviewRepository.GetByIdWithDetailsAsync(reactionInDb.ReviewId);
+            await UpdateReviewLikesDislikes(review);
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        private async Task UpdateReviewLikesDislikes(Review review)
+        {
+            review.Likes = review.Reactions.Where(rr => rr.IsLike == true).Count();
+            review.Dislikes = review.Reactions.Where(rr => rr.IsLike == false).Count();
+            await _unitOfWork.ReviewRepository.UpdateAsync(review);
+        }
+
         private async Task<bool> DoesReviewExistByUserAlbumIdAsync(Guid userId, Guid albumId)
         {
             var reviewInDb = await _unitOfWork.ReviewRepository.GetByUserAlbumIdAsync(userId, albumId);
             return reviewInDb != null;
+        }
+
+        private async Task ValidateReactionAsync(Guid userId, Guid reviewId)
+        {
+            var review = await _unitOfWork.ReviewRepository.GetByIdAsync(reviewId);
+            if (review == null)
+                throw new MusicLibraryException("Review not found");
+
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (user == null)
+                throw new MusicLibraryException("User not found");
         }
     }
 }

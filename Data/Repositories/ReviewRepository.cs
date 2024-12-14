@@ -45,6 +45,8 @@ namespace Data.Repositories
                 var review = await _context.Reviews.FindAsync(entity.Id);
                 if (review != null)
                 {
+                    review.Likes = entity.Likes;
+                    review.Dislikes = entity.Dislikes;
                     review.Rating = entity.Rating;
                     review.Content = entity.Content;
                     review.LastUpdatedAt = entity.LastUpdatedAt;

@@ -84,5 +84,54 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        // POST: api/reviews/{reviewId}/reactions
+        [HttpPost("api/reviews/{reviewId}/reactions")]
+        public async Task<IActionResult> AddReaction(Guid reviewId, [FromBody] ReviewReactionDto model)
+        {
+            model.ReviewId = reviewId;
+            try
+            {
+                await _reviewService.AddReactionAsync(model);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // PUT: api/reviews/reactions/{reactionId}
+        [HttpPut("api/reviews/reactions/{reactionId}")]
+        public async Task<IActionResult> UpdateReaction(Guid reactionId)
+        {
+            try
+            {
+                await _reviewService.UpdateReactionAsync(reactionId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // DELETE: api/reviews/reactions/{reactionId}
+        [HttpDelete("api/reviews/reactions/{reactionId}")]
+        public async Task<IActionResult> DeleteReaction(Guid reactionId)
+        {
+            try
+            {
+                await _reviewService.DeleteReactionAsync(reactionId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

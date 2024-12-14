@@ -1,6 +1,5 @@
 ﻿using Business.Interfaces;
 using Business.Models.Playlists;
-using Business.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers

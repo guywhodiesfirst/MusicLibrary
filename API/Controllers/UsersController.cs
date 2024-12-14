@@ -1,7 +1,5 @@
 ﻿using Business.Interfaces;
 using Business.Models.Users;
-using Business.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers

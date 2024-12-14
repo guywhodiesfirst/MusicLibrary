@@ -65,8 +65,7 @@ namespace Data.Data
 
             optionsBuilder
                 .LogTo(Console.WriteLine)   // Логування до консолі
-                .EnableSensitiveDataLogging()  // Дозволяє бачити SQL-запити для відлагодження
-                .UseSqlite("DataSource=musicLibrary.db"); // Замініть на вашу реальну строку підключення
+                .EnableSensitiveDataLogging();  // Дозволяє бачити SQL-запити для відлагодження
         }
     }
 }
