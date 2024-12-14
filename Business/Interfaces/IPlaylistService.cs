@@ -4,7 +4,7 @@ namespace Business.Interfaces
 {
     public interface IPlaylistService : IService<PlaylistDto>
     {
-        Task AddAsync(PlaylistDto model);
+        Task AddAsync(PlaylistCreateDto model);
         Task AddAlbumToPlaylistByIdAsync(Guid albumId, Guid playlistId);
         Task RemoveAlbumFromPlaylistByIdAsync(Guid albumId, Guid playlistId);
         Task UpdateAsync(PlaylistDto model);

@@ -53,8 +53,8 @@ namespace Data.Repositories
 
         public async Task<IEnumerable<Playlist>> GetAllAsync()
         {
-            var users = await _context.Playlists.ToListAsync();
-            return users;
+            var playlists = await _context.Playlists.ToListAsync();
+            return playlists ?? null;
         }
 
         public async Task<IEnumerable<Playlist>> GetAllWithDetailsAsync()

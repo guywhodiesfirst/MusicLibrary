@@ -36,16 +36,8 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        // GET: api/albums/details
-        [HttpGet("details")]
-        public async Task<IActionResult> GetAllWithDetails()
-        {
-            var result = await _albumService.GetAllWithDetailsAsync();
-            return Ok(result);
-        }
-
         // GET: api/albums/{id}
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _albumService.GetByIdAsync(id);
@@ -61,7 +53,7 @@ namespace API.Controllers
         }
 
         // DELETE: api/albums/{id}
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

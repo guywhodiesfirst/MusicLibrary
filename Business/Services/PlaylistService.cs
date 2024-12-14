@@ -45,10 +45,15 @@ namespace Business.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task AddAsync(PlaylistDto model)
+        public async Task AddAsync(PlaylistCreateDto model)
         {
-            model.Id = Guid.NewGuid();
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(model.UserId);
+            if (user == null)
+                throw new ArgumentNullException("User not found");
+            
             var playlist = _mapper.Map<Playlist>(model);
+            playlist.Id = Guid.NewGuid();
+            playlist.CreatedAt = DateTime.Now;
             await _unitOfWork.PlaylistRepository.AddAsync(playlist);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -66,13 +71,13 @@ namespace Business.Services
 
         public async Task<IEnumerable<PlaylistDto>> GetAllAsync()
         {
-            var playlists = await _unitOfWork.PlaylistRepository.GetAllAsync();
+            var playlists = await _unitOfWork.PlaylistRepository.GetAllWithDetailsAsync();
             return playlists == null ? Enumerable.Empty<PlaylistDto>() : _mapper.Map<IEnumerable<PlaylistDto>>(playlists);
         }
 
         public async Task<PlaylistDto> GetByIdAsync(Guid id)
         {
-            var playlistInDb = await _unitOfWork.PlaylistRepository.GetByIdAsync(id);
+            var playlistInDb = await _unitOfWork.PlaylistRepository.GetByIdWithDetailsAsync(id);
             return playlistInDb == null ? throw new MusicLibraryException("Playlist not found") : _mapper.Map<PlaylistDto>(playlistInDb);
         }
 

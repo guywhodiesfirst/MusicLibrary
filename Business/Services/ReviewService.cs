@@ -50,6 +50,7 @@ namespace Business.Services
             review.Album = _mapper.Map<Album>(album);
 
             await _unitOfWork.ReviewRepository.AddAsync(review);
+            await _albumService.UpdateAlbumRatingByIdAsync(review.AlbumId);
             await _unitOfWork.SaveChangesAsync();
         }
 
@@ -102,6 +103,7 @@ namespace Business.Services
             review.Rating = model.Rating;
 
             await _unitOfWork.ReviewRepository.UpdateAsync(review);
+            await _albumService.UpdateAlbumRatingByIdAsync(review.AlbumId);
             await _unitOfWork.SaveChangesAsync();
         }
 
