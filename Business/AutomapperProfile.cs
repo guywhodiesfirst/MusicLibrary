@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Models.Albums;
+using Business.Models.Auth;
 using Business.Models.Comments;
 using Business.Models.MusicBrainz;
 using Business.Models.Playlists;
@@ -52,6 +53,12 @@ namespace Business
                 .ForMember(dto => dto.CommentCount, u => u.MapFrom(x => x.Comments.Count))
                 .ForMember(dto => dto.PlaylistCount, u => u.MapFrom(x => x.Playlists.Count))
                 .ForMember(dto => dto.ReviewCount, u => u.MapFrom(x => x.Reviews.Count))
+                .ReverseMap();
+
+            CreateMap<User, LoginRequestDto>()
+                .ReverseMap();
+
+            CreateMap<User, RegistrationRequestDto>()
                 .ReverseMap();
 
             CreateMap<Review, ReviewDto>()
