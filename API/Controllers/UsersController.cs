@@ -1,5 +1,8 @@
-﻿using Business.Interfaces;
+﻿using API.Interfaces;
+using Business.Interfaces;
 using Business.Models.Users;
+using Business.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -9,9 +12,11 @@ namespace API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly IControllerHelper _controllerHelper;
+        public UsersController(IUserService userService, IControllerHelper controllerHelper)
         {
             _userService = userService;
+            _controllerHelper = controllerHelper;
         }
 
         // GET: api/users
@@ -23,6 +28,7 @@ namespace API.Controllers
         }
 
         // GET: api/users/id
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -31,6 +37,7 @@ namespace API.Controllers
         }
 
         // GET: api/users/id/details
+        [AllowAnonymous]
         [HttpGet("{id}/details")]
         public async Task<IActionResult> GetByIdWithDetails(Guid id)
         {
@@ -52,9 +59,19 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(UserDto model)
+        [Authorize]
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> Update(Guid userId, UserDto model)
         {
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
+                return Unauthorized();
+
+            if (currentUserId != userId)
+                return Forbid();
+
+            model.Id = currentUserId;
+
             try
             {
                 await _userService.UpdateAsync(model);

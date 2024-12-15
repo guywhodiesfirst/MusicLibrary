@@ -1,25 +1,37 @@
-﻿using Business.Interfaces;
+﻿using API.Interfaces;
+using Business.Interfaces;
 using Business.Models.Reviews;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace API.Controllers
 {
-    // TODO: methods to get reviews by album and by user
     [ApiController]
     public class ReviewsController : ControllerBase
     {
         private readonly IReviewService _reviewService;
-        public ReviewsController(IReviewService reviewService) =>
+        private readonly IControllerHelper _controllerHelper;
+        public ReviewsController(IReviewService reviewService, IControllerHelper controllerHelper)
+        {
             _reviewService = reviewService;
+            _controllerHelper = controllerHelper;
+        }
 
-        // GET: api/albums/reviews
+        // GET: api/reviews
         [AllowAnonymous]
         [HttpGet("api/reviews")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _reviewService.GetAllAsync();
+            return Ok(result);
+        }
+
+        // GET: api/albums/{albumId}/reviews
+        [AllowAnonymous]
+        [HttpGet("api/albums/{albumId}/reviews")]
+        public async Task<IActionResult> GetAllByAlbumId(Guid albumId)
+        {
+            var result = await _reviewService.GetAllByAlbumIdAsync(albumId);
             return Ok(result);
         }
 
@@ -46,13 +58,13 @@ namespace API.Controllers
         [HttpPost("api/albums/{albumId}/reviews")]
         public async Task<IActionResult> Add(Guid albumId, [FromBody] ReviewCreateDto model)
         {
-            var userId = GetCurrentUserId();
-            if (userId == Guid.Empty)
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
             {
                 return Unauthorized();
             }
             model.AlbumId = albumId;
-            model.UserId = userId;
+            model.UserId = currentUserId;
             try
             {
                 await _reviewService.AddAsync(model);
@@ -70,11 +82,11 @@ namespace API.Controllers
         [HttpDelete("api/reviews/{reviewId}")]
         public async Task<IActionResult> Delete(Guid reviewId)
         {
-            var userId = GetCurrentUserId();
-            if (userId == Guid.Empty)
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
                 return Unauthorized();
             
-            if(!await _reviewService.IsUserReviewOwnerAsync(userId, reviewId))
+            if(!await _reviewService.IsUserReviewOwnerAsync(currentUserId, reviewId))
                 return Forbid();
             
             try
@@ -93,11 +105,11 @@ namespace API.Controllers
         [HttpPut("api/reviews/{reviewId}")]
         public async Task<IActionResult> Update(Guid reviewId, ReviewUpdateDto model)
         {
-            var userId = GetCurrentUserId();
-            if (userId == Guid.Empty)
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
                 return Unauthorized();
 
-            if (!await _reviewService.IsUserReviewOwnerAsync(userId, reviewId))
+            if (!await _reviewService.IsUserReviewOwnerAsync(currentUserId, reviewId))
                 return Forbid();
 
             model.Id = reviewId;
@@ -117,12 +129,12 @@ namespace API.Controllers
         [HttpPost("api/reviews/{reviewId}/reactions")]
         public async Task<IActionResult> AddReaction(Guid reviewId, [FromBody] ReviewReactionDto model)
         {
-            var userId = GetCurrentUserId();
-            if (userId == Guid.Empty)
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
                 return Unauthorized();
 
             model.ReviewId = reviewId;
-            model.UserId = userId;
+            model.UserId = currentUserId;
             try
             {
                 await _reviewService.AddReactionAsync(model);
@@ -140,11 +152,11 @@ namespace API.Controllers
         [HttpPut("api/reviews/reactions/{reactionId}")]
         public async Task<IActionResult> UpdateReaction(Guid reactionId)
         {
-            var userId = GetCurrentUserId();
-            if (userId == Guid.Empty)
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
                 return Unauthorized();
 
-            if (!await _reviewService.IsUserReactionOwnerAsync(userId, reactionId))
+            if (!await _reviewService.IsUserReactionOwnerAsync(currentUserId, reactionId))
                 return Forbid();
 
             try
@@ -164,11 +176,11 @@ namespace API.Controllers
         [HttpDelete("api/reviews/reactions/{reactionId}")]
         public async Task<IActionResult> DeleteReaction(Guid reactionId)
         {
-            var userId = GetCurrentUserId();
-            if (userId == Guid.Empty)
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
                 return Unauthorized();
 
-            if (!await _reviewService.IsUserReactionOwnerAsync(userId, reactionId))
+            if (!await _reviewService.IsUserReactionOwnerAsync(currentUserId, reactionId))
                 return Forbid();
 
             try
@@ -181,12 +193,6 @@ namespace API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        private Guid GetCurrentUserId()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return userId == null ? Guid.Empty : Guid.Parse(userId);
         }
     }
 }

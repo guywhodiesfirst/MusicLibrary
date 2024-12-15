@@ -32,6 +32,9 @@ namespace Business
             CreateMap<Playlist, PlaylistCreateDto>()
                 .ReverseMap();
 
+            CreateMap<Playlist, PlaylistUpdateDto>()
+                .ReverseMap();
+
             CreateMap<Playlist, PlaylistDto>()
                 .ForMember(dto => dto.AlbumCount, p => p.MapFrom(x => x.Albums.Count()))
                 .ForMember(dto => dto.Username, p => p.MapFrom(x => x.User.Username))

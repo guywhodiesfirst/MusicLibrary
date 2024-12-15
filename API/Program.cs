@@ -1,3 +1,4 @@
+using API.Interfaces;
 using API.Middleware;
 using Business;
 using Business.Interfaces;
@@ -45,8 +46,11 @@ builder.Services.AddAuthentication(options =>
         };
     }
 );
+
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthorization();
 builder.Services.AddAutoMapper(typeof(AutomapperProfile).Assembly);
+builder.Services.AddScoped<IControllerHelper, ControllerHelper>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAlbumService, AlbumService>();

@@ -105,7 +105,7 @@ namespace Business.Services
         {
             var reviews = await _unitOfWork.ReviewRepository.GetAllWithDetailsAsync();
             return reviews == null ? Enumerable.Empty<ReviewDto>() : 
-                _mapper.Map<IEnumerable<ReviewDto>>(reviews.OrderBy(r => r.LastUpdatedAt));
+                _mapper.Map<IEnumerable<ReviewDto>>(reviews.OrderByDescending(r => r.LastUpdatedAt));
         }
 
         public async Task<ReviewDto> GetByIdAsync(Guid id)
@@ -117,9 +117,17 @@ namespace Business.Services
         public async Task<ReviewDetailsDto> GetByIdWithDetailsAsync(Guid modelId)
         {
             var reviewInDb = await _unitOfWork.ReviewRepository.GetByIdWithDetailsAsync(modelId);
-            return reviewInDb == null ? null : _mapper.Map<ReviewDetailsDto>(reviewInDb);
+            return reviewInDb == null ? null 
+                : _mapper.Map<ReviewDetailsDto>(reviewInDb);
         }
 
+        public async Task<IEnumerable<ReviewDto>> GetAllByAlbumIdAsync(Guid albumId)
+        {
+            var reviews = await _unitOfWork.ReviewRepository.GetAllWithDetailsAsync();
+            var reviewsByAlbum = reviews.Where(r => r.AlbumId == albumId);
+            return reviewsByAlbum == null ? Enumerable.Empty<ReviewDto>() 
+                : _mapper.Map<IEnumerable<ReviewDto>>(reviewsByAlbum.OrderByDescending(r => r.LastUpdatedAt));
+        }
         public async Task UpdateAsync(ReviewUpdateDto model)
         {
             if (model == null)

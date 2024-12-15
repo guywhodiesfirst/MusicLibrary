@@ -1,6 +1,6 @@
 ﻿namespace Business.Models.Playlists
 {
-    public class PlaylistCreateDto
+    public class PlaylistUpdateDto : BaseDto
     {
         public Guid UserId { get; set; }
         public string Name { get; set; }

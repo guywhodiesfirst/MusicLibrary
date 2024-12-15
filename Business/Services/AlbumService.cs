@@ -54,25 +54,29 @@ namespace Business.Services
         public async Task<IEnumerable<AlbumDto>> GetAllAsync()
         {
             var albums = await _unitOfWork.AlbumRepository.GetAllWithDetailsAsync();
-            return albums == null ? Enumerable.Empty<AlbumDto>() : _mapper.Map<IEnumerable<AlbumDto>>(albums);
+            return albums == null ? Enumerable.Empty<AlbumDto>() 
+                : _mapper.Map<IEnumerable<AlbumDto>>(albums);
         }
 
         public async Task<IEnumerable<AlbumDetailsDto>> GetAllWithDetailsAsync()
         {
             var albums = await _unitOfWork.AlbumRepository.GetAllWithDetailsAsync();
-            return albums == null ? Enumerable.Empty<AlbumDetailsDto>() : _mapper.Map<IEnumerable<AlbumDetailsDto>>(albums);
+            return albums == null ? Enumerable.Empty<AlbumDetailsDto>() 
+                : _mapper.Map<IEnumerable<AlbumDetailsDto>>(albums);
         }
 
         public async Task<AlbumDto> GetByIdAsync(Guid id)
         {
             var albumInDb = await _unitOfWork.AlbumRepository.GetByIdWithDetailsAsync(id);
-            return albumInDb == null ? null : _mapper.Map<AlbumDto>(albumInDb);
+            return albumInDb == null ? null 
+                : _mapper.Map<AlbumDto>(albumInDb);
         }
 
         public async Task<AlbumDetailsDto> GetByIdWithDetailsAsync(Guid id)
         {
             var albumInDb = await _unitOfWork.AlbumRepository.GetByIdWithDetailsAsync(id);
-            return albumInDb == null ? null : _mapper.Map<AlbumDetailsDto>(albumInDb);
+            return albumInDb == null ? null 
+                : _mapper.Map<AlbumDetailsDto>(albumInDb);
         }
 
         public async Task UpdateAlbumRatingByIdAsync(Guid id)

@@ -16,22 +16,6 @@ namespace Business.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task AddAsync(UserDto model)
-        {
-            // TODO: add model validation
-            var userInDb = await _unitOfWork.UserRepository.GetByEmailAsync(model.Email);
-            if (userInDb != null)
-            {
-                Console.WriteLine("блять");
-                throw new MusicLibraryException("User already exists!");
-            }
-            
-            // TODO: add password hashing
-            model.Id = Guid.NewGuid();
-            var user = _mapper.Map<User>(model);
-            await _unitOfWork.UserRepository.AddAsync(user);
-            await _unitOfWork.SaveChangesAsync();
-        }
 
         public async Task DeleteAsync(Guid modelId)
         {
@@ -52,19 +36,22 @@ namespace Business.Services
         public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
             var users = await _unitOfWork.UserRepository.GetAllAsync();
-            return users == null ? Enumerable.Empty<UserDto>() : _mapper.Map<IEnumerable<UserDto>>(users);
+            return users == null ? Enumerable.Empty<UserDto>() 
+                : _mapper.Map<IEnumerable<UserDto>>(users);
         }
 
         public async Task<UserDto> GetByIdAsync(Guid id)
         {
             var userInDb = await _unitOfWork.UserRepository.GetByIdAsync(id);
-            return userInDb == null ? null : _mapper.Map<UserDto>(userInDb);
+            return userInDb == null ? null 
+                : _mapper.Map<UserDto>(userInDb);
         }
 
         public async Task<UserDetailsDto> GetByIdWithDetailsAsync(Guid id)
         {
             var userInDb = await _unitOfWork.UserRepository.GetByIdWithDetailsAsync(id);
-            return userInDb == null ? null : _mapper.Map<UserDetailsDto>(userInDb);
+            return userInDb == null ? null 
+                : _mapper.Map<UserDetailsDto>(userInDb);
         }
 
         public async Task UpdateAsync(UserDto model)

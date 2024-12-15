@@ -1,5 +1,7 @@
-﻿using Business.Interfaces;
+﻿using API.Interfaces;
+using Business.Interfaces;
 using Business.Models.Playlists;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -9,12 +11,15 @@ namespace API.Controllers
     public class PlaylistsController : ControllerBase
     {
         private readonly IPlaylistService _playlistService;
-        public PlaylistsController(IPlaylistService playlistService)
+        private readonly IControllerHelper _controllerHelper;
+        public PlaylistsController(IPlaylistService playlistService, IControllerHelper controllerHelper)
         {
             _playlistService = playlistService;
+            _controllerHelper = controllerHelper;
         }
 
         // GET: api/playlists
+        [AllowAnonymous]
         [HttpGet("api/playlists")]
         public async Task<IActionResult> GetAll()
         {
@@ -23,6 +28,7 @@ namespace API.Controllers
         }
 
         // GET: api/playlists/{id}
+        [AllowAnonymous]
         [HttpGet("api/playlists/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -31,6 +37,7 @@ namespace API.Controllers
         }
 
         // GET: api/playlists/{id}/details
+        [AllowAnonymous]
         [HttpGet("api/playlists/{id}/details")]
         public async Task<IActionResult> GetByIdWithDetails(Guid id)
         {
@@ -39,10 +46,18 @@ namespace API.Controllers
         }
 
         // POST: "api/users/{userId}/playlists"
+        [Authorize]
         [HttpPost("api/users/{userId}/playlists")]
         public async Task<IActionResult> Add(Guid userId, [FromBody] PlaylistCreateDto model)
         {
-            model.UserId = userId;
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
+                return Unauthorized();
+
+            if (currentUserId != userId)
+                return Forbid();
+
+            model.UserId = currentUserId;
             try
             {
                 await _playlistService.AddAsync(model);
@@ -56,12 +71,20 @@ namespace API.Controllers
         }
 
         // DELETE: api/playlists/{id}
-        [HttpDelete("api/playlists/{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [Authorize]
+        [HttpDelete("api/playlists/{playlistId}")]
+        public async Task<IActionResult> Delete(Guid playlistId)
         {
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
+                return Unauthorized();
+
+            if (!await _playlistService.IsUserPlaylistOwnerAsync(currentUserId, playlistId))
+                return Forbid();
+
             try
             {
-                await _playlistService.DeleteAsync(id);
+                await _playlistService.DeleteAsync(playlistId);
                 return Ok();
             }
             catch (Exception ex)
@@ -71,9 +94,17 @@ namespace API.Controllers
         }
 
         // POST: api/playlists/{playlistId}/albums/{albumId}
+        [Authorize]
         [HttpPost("api/playlists/{playlistId}/albums/{albumId}")]
         public async Task<IActionResult> AddAlbumToPlaylist(Guid albumId, Guid playlistId)
         {
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
+                return Unauthorized();
+
+            if (!await _playlistService.IsUserPlaylistOwnerAsync(currentUserId, playlistId))
+                return Forbid();
+
             try
             {
                 await _playlistService.AddAlbumToPlaylistByIdAsync(albumId, playlistId);
@@ -85,10 +116,42 @@ namespace API.Controllers
             }
         }
 
+        // PUT: api/playlists/{playlistId}
+        [Authorize]
+        [HttpPut("api/playlists/{playlistId}")]
+        public async Task<IActionResult> Update(Guid playlistId, PlaylistUpdateDto model)
+        {
+            var userId = _controllerHelper.GetCurrentUserId();
+            if (userId == Guid.Empty)
+                return Unauthorized();
+
+            if (!await _playlistService.IsUserPlaylistOwnerAsync(userId, playlistId))
+                return Forbid();
+
+            model.Id = playlistId;
+            try
+            {
+                await _playlistService.UpdateAsync(model);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         // DELETE: api/playlists/{playlistId}/albums/{albumId}
+        [Authorize]
         [HttpDelete("api/playlists/{playlistId}/albums/{albumId}")]
         public async Task<IActionResult> RemoveAlbumFromPlaylist(Guid albumId, Guid playlistId)
         {
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
+                return Unauthorized();
+
+            if (!await _playlistService.IsUserPlaylistOwnerAsync(currentUserId, playlistId))
+                return Forbid();
+
             try
             {
                 await _playlistService.RemoveAlbumFromPlaylistByIdAsync(albumId, playlistId);

@@ -2,8 +2,10 @@
 using Business.Exceptions;
 using Business.Interfaces;
 using Business.Models.Comments;
+using Business.Models.Playlists;
 using Data.Entities;
 using Data.Interfaces;
+using System.Xml.Linq;
 
 namespace Business.Services
 {
@@ -48,13 +50,29 @@ namespace Business.Services
         public async Task<IEnumerable<CommentDto>> GetAllAsync()
         {
             var comments = await _unitOfWork.CommentRepository.GetAllAsync();
-            return comments == null ? Enumerable.Empty<CommentDto>() : _mapper.Map<IEnumerable<CommentDto>>(comments);
+            return comments == null ? Enumerable.Empty<CommentDto>() 
+                : _mapper.Map<IEnumerable<CommentDto>>(comments);
         }
 
         public async Task<CommentDto> GetByIdAsync(Guid id)
         {
             var commentInDb = await _unitOfWork.CommentRepository.GetByIdAsync(id);
-            return commentInDb == null ? null : _mapper.Map<CommentDto>(commentInDb);
+            return commentInDb == null ? null 
+                : _mapper.Map<CommentDto>(commentInDb);
+        }
+
+        public async Task<IEnumerable<CommentDto>> GetAllByReviewIdAsync(Guid reviewId)
+        {
+            var comments = await _unitOfWork.CommentRepository.GetAllAsync();
+            var commentsByReview = comments.Where(c => c.ReviewId == reviewId);
+            return commentsByReview == null ? Enumerable.Empty<CommentDto>() 
+                : _mapper.Map<IEnumerable<CommentDto>>(commentsByReview);
+        }
+
+        public async Task<bool> IsUserCommentOwnerAsync(Guid userId, Guid commentId)
+        {
+            var comment = await _unitOfWork.CommentRepository.GetByIdAsync(commentId);
+            return comment != null && comment.UserId == userId;
         }
     }
 }

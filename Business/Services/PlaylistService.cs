@@ -72,19 +72,28 @@ namespace Business.Services
         public async Task<IEnumerable<PlaylistDto>> GetAllAsync()
         {
             var playlists = await _unitOfWork.PlaylistRepository.GetAllWithDetailsAsync();
-            return playlists == null ? Enumerable.Empty<PlaylistDto>() : _mapper.Map<IEnumerable<PlaylistDto>>(playlists);
+            return playlists == null ? Enumerable.Empty<PlaylistDto>() 
+                : _mapper.Map<IEnumerable<PlaylistDto>>(playlists.OrderBy(p => p.CreatedAt));
         }
 
         public async Task<PlaylistDto> GetByIdAsync(Guid id)
         {
             var playlistInDb = await _unitOfWork.PlaylistRepository.GetByIdWithDetailsAsync(id);
-            return playlistInDb == null ? throw new MusicLibraryException("Playlist not found") : _mapper.Map<PlaylistDto>(playlistInDb);
+            return playlistInDb == null ? null
+                : _mapper.Map<PlaylistDto>(playlistInDb);
         }
 
         public async Task<PlaylistDetailsDto> GetByIdWithDetailsAsync(Guid id)
         {
             var playlistInDb = await _unitOfWork.PlaylistRepository.GetByIdWithDetailsAsync(id);
-            return playlistInDb == null ? throw new MusicLibraryException("Playlist not found") : _mapper.Map<PlaylistDetailsDto>(playlistInDb);
+            return playlistInDb == null ? null
+                : _mapper.Map<PlaylistDetailsDto>(playlistInDb);
+        }
+
+        public async Task<bool> IsUserPlaylistOwnerAsync(Guid userId, Guid playlistId)
+        {
+            var playlist = await _unitOfWork.PlaylistRepository.GetByIdAsync(playlistId);
+            return playlist != null && playlist.UserId == userId;
         }
 
         public async Task RemoveAlbumFromPlaylistByIdAsync(Guid albumId, Guid playlistId)
@@ -97,7 +106,7 @@ namespace Business.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(PlaylistDto model)
+        public async Task UpdateAsync(PlaylistUpdateDto model)
         {
             if (model == null)
                 throw new ArgumentNullException("Model can't be null");
@@ -111,7 +120,8 @@ namespace Business.Services
 
         private async Task<bool> DoesPlaylistContainAlbum(Guid albumId, Guid playlistId)
         {
-            var connection = await _unitOfWork.PlaylistRepository.GetAlbumPlaylistConnectionAsync(albumId, playlistId);
+            var connection = await _unitOfWork.PlaylistRepository
+                .GetAlbumPlaylistConnectionAsync(albumId, playlistId);
 
             return connection != null;
         }
