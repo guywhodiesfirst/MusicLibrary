@@ -1,7 +1,6 @@
 ﻿using API.Interfaces;
 using Business.Interfaces;
 using Business.Models.Users;
-using Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
