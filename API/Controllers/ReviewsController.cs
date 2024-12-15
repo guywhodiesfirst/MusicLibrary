@@ -1,6 +1,8 @@
 ﻿using Business.Interfaces;
 using Business.Models.Reviews;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -9,12 +11,11 @@ namespace API.Controllers
     public class ReviewsController : ControllerBase
     {
         private readonly IReviewService _reviewService;
-        public ReviewsController(IReviewService reviewService)
-        {
+        public ReviewsController(IReviewService reviewService) =>
             _reviewService = reviewService;
-        }
 
         // GET: api/albums/reviews
+        [AllowAnonymous]
         [HttpGet("api/reviews")]
         public async Task<IActionResult> GetAll()
         {
@@ -23,6 +24,7 @@ namespace API.Controllers
         }
 
         // GET: api/reviews/{id}
+        [AllowAnonymous]
         [HttpGet("api/reviews/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -31,6 +33,7 @@ namespace API.Controllers
         }
 
         // GET: api/reviews/{id}/details
+        [AllowAnonymous]
         [HttpGet("api/reviews/{id}/details")]
         public async Task<IActionResult> GetByIdWithDetails(Guid id)
         {
@@ -39,10 +42,17 @@ namespace API.Controllers
         }
 
         // POST: "api/albums/{albumId}/reviews"
+        [Authorize]
         [HttpPost("api/albums/{albumId}/reviews")]
         public async Task<IActionResult> Add(Guid albumId, [FromBody] ReviewCreateDto model)
         {
+            var userId = GetCurrentUserId();
+            if (userId == Guid.Empty)
+            {
+                return Unauthorized();
+            }
             model.AlbumId = albumId;
+            model.UserId = userId;
             try
             {
                 await _reviewService.AddAsync(model);
@@ -55,13 +65,21 @@ namespace API.Controllers
             }
         }
 
-        // DELETE: api/reviews/{id}
-        [HttpDelete("api/reviews/{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        // DELETE: api/reviews/{reviewId}
+        [Authorize]
+        [HttpDelete("api/reviews/{reviewId}")]
+        public async Task<IActionResult> Delete(Guid reviewId)
         {
+            var userId = GetCurrentUserId();
+            if (userId == Guid.Empty)
+                return Unauthorized();
+            
+            if(!await _reviewService.IsUserReviewOwnerAsync(userId, reviewId))
+                return Forbid();
+            
             try
             {
-                await _reviewService.DeleteAsync(id);
+                await _reviewService.DeleteAsync(reviewId);
                 return Ok();
             }
             catch (Exception ex)
@@ -71,10 +89,18 @@ namespace API.Controllers
         }
 
         // PUT: api/reviews/{id}
-        [HttpPut("api/reviews/{id}")]
-        public async Task<IActionResult> Update(Guid id, ReviewUpdateDto model)
+        [Authorize]
+        [HttpPut("api/reviews/{reviewId}")]
+        public async Task<IActionResult> Update(Guid reviewId, ReviewUpdateDto model)
         {
-            model.Id = id;
+            var userId = GetCurrentUserId();
+            if (userId == Guid.Empty)
+                return Unauthorized();
+
+            if (!await _reviewService.IsUserReviewOwnerAsync(userId, reviewId))
+                return Forbid();
+
+            model.Id = reviewId;
             try
             {
                 await _reviewService.UpdateAsync(model);
@@ -87,10 +113,16 @@ namespace API.Controllers
         }
 
         // POST: api/reviews/{reviewId}/reactions
+        [Authorize]
         [HttpPost("api/reviews/{reviewId}/reactions")]
         public async Task<IActionResult> AddReaction(Guid reviewId, [FromBody] ReviewReactionDto model)
         {
+            var userId = GetCurrentUserId();
+            if (userId == Guid.Empty)
+                return Unauthorized();
+
             model.ReviewId = reviewId;
+            model.UserId = userId;
             try
             {
                 await _reviewService.AddReactionAsync(model);
@@ -104,9 +136,17 @@ namespace API.Controllers
         }
 
         // PUT: api/reviews/reactions/{reactionId}
+        [Authorize]
         [HttpPut("api/reviews/reactions/{reactionId}")]
         public async Task<IActionResult> UpdateReaction(Guid reactionId)
         {
+            var userId = GetCurrentUserId();
+            if (userId == Guid.Empty)
+                return Unauthorized();
+
+            if (!await _reviewService.IsUserReactionOwnerAsync(userId, reactionId))
+                return Forbid();
+
             try
             {
                 await _reviewService.UpdateReactionAsync(reactionId);
@@ -120,9 +160,17 @@ namespace API.Controllers
         }
 
         // DELETE: api/reviews/reactions/{reactionId}
+        [Authorize]
         [HttpDelete("api/reviews/reactions/{reactionId}")]
         public async Task<IActionResult> DeleteReaction(Guid reactionId)
         {
+            var userId = GetCurrentUserId();
+            if (userId == Guid.Empty)
+                return Unauthorized();
+
+            if (!await _reviewService.IsUserReactionOwnerAsync(userId, reactionId))
+                return Forbid();
+
             try
             {
                 await _reviewService.DeleteReactionAsync(reactionId);
@@ -133,6 +181,12 @@ namespace API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        private Guid GetCurrentUserId()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return userId == null ? Guid.Empty : Guid.Parse(userId);
         }
     }
 }

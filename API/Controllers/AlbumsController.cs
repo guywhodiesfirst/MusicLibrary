@@ -13,21 +13,6 @@ namespace API.Controllers
             _albumService = albumService;
         }
 
-        // POST: api/albums/{id}
-        [HttpPost("{id}")]
-        public async Task<IActionResult> AddByMusicBrainzId(Guid id)
-        {
-            try
-            {
-                await _albumService.AddByMusicBrainzIdAsync(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
         // GET: api/albums
         [HttpGet]
         public async Task<IActionResult> GetAll()

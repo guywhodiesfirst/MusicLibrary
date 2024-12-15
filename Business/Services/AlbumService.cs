@@ -28,6 +28,7 @@ namespace Business.Services
                 {
                     var musicBrainzAlbum = await _musicBrainzQueryService.GetAlbumByIdAsync(id);
                     var album = _mapper.Map<Album>(musicBrainzAlbum);
+                    album.AverageRating = 0;
                     await _unitOfWork.AlbumRepository.AddAsync(album);
                 }
                 catch (Exception ex)
@@ -82,17 +83,5 @@ namespace Business.Services
             await _unitOfWork.AlbumRepository.UpdateAsync(album);
             await _unitOfWork.SaveChangesAsync();
         }
-
-        //public async Task UpdateAsync(AlbumDto model)
-        //{
-        //    if (model == null)
-        //        throw new ArgumentNullException("Model can't be null");
-        //    var albumInDb = await _unitOfWork.AlbumRepository.GetByIdAsync(model.Id);
-        //    if(albumInDb == null)
-        //        throw new MusicLibraryException("Album not found");
-        //    var album = _mapper.Map<Album>(model);
-        //    await _unitOfWork.AlbumRepository.UpdateAsync(album);
-        //    await _unitOfWork.SaveChangesAsync();
-        //}
     }
 }

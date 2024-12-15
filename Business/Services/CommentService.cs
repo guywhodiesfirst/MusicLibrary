@@ -11,14 +11,10 @@ namespace Business.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IReviewService _reviewService;
-        private readonly IUserService _userService;
-        public CommentService(IMapper mapper, IUnitOfWork unitOfWork, IReviewService reviewService, IUserService userService)
+        public CommentService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _reviewService = reviewService;
-            _userService = userService;
         }
         public async Task AddAsync(CommentDto model)
         {

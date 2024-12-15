@@ -176,5 +176,17 @@ namespace Business.Services
             if (user == null)
                 throw new MusicLibraryException("User not found");
         }
+
+        public async Task<bool> IsUserReviewOwnerAsync(Guid userId, Guid reviewId)
+        {
+            var review = await _unitOfWork.ReviewRepository.GetByIdAsync(reviewId);
+            return review != null && review.UserId == userId;
+        }
+
+        public async Task<bool> IsUserReactionOwnerAsync(Guid userId, Guid reactionId)
+        {
+            var reaction = await _unitOfWork.ReviewReactionRepository.GetByIdAsync(reactionId);
+            return reaction != null && reaction.UserId == userId;
+        }
     }
 }

@@ -48,7 +48,9 @@ namespace Business.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Email, request.Email)
+                    new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()),
+                    new Claim(ClaimTypes.Name, userAccount.Username),
+                    new Claim(ClaimTypes.Email, userAccount.Email)
                 }),
                 Expires = tokenExpiryTimeStamp,
                 Audience = audience,
@@ -74,17 +76,14 @@ namespace Business.Services
             // TODO: add model validation
             var userInDb = await _unitOfWork.UserRepository.GetByEmailAsync(request.Email);
             if (userInDb != null)
-            {
-                Console.WriteLine("блять");
                 throw new MusicLibraryException("User already exists!");
-            }
 
-            // TODO: add password hashing
             var user = _mapper.Map<User>(request);
             user.Id = Guid.NewGuid();
             user.Password = PasswordHashHandler.HashPassword(request.Password);
             user.IsBlocked = false;
             user.IsAdmin = false;
+
             await _unitOfWork.UserRepository.AddAsync(user);
             await _unitOfWork.SaveChangesAsync();
         }

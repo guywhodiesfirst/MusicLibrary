@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -33,6 +33,7 @@ namespace API.Controllers
         }
 
         // POST: api/auth/register
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Add([FromBody] RegistrationRequestDto model)
         {
