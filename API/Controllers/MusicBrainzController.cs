@@ -17,6 +17,7 @@ namespace API.Controllers
         }
 
         // GET: api/MusicBrainz/albums/search
+        [AllowAnonymous]
         [HttpGet("albums/search")]
         public async Task<IActionResult> GetAlbumsByName([FromQuery] string query)
         {
@@ -37,6 +38,7 @@ namespace API.Controllers
         }
 
         // GET: api/MusicBrainz/albums/{id}
+        [AllowAnonymous]
         [HttpGet("albums/{id}")]
         public async Task<IActionResult> GetAlbumById(Guid id)
         {

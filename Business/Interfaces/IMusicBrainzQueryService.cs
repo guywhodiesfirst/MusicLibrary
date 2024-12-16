@@ -1,10 +1,11 @@
-﻿using Business.Models.MusicBrainz;
+﻿using Business.Models.Albums;
+using Business.Models.MusicBrainz;
 
 namespace Business.Interfaces
 {
     public interface IMusicBrainzQueryService
     {
-        Task<MusicBrainzSearchResponse> GetAlbumsByNameAsync(string searchQuery);
-        Task<MusicBrainzReleaseGroup> GetAlbumByIdAsync(Guid albumId);
+        Task<IEnumerable<AlbumDto>> GetAlbumsByNameAsync(string searchQuery);
+        Task<AlbumDto> GetAlbumByIdAsync(Guid albumId);
     }
 }

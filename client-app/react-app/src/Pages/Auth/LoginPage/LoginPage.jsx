@@ -31,7 +31,7 @@ export default function Login() {
             alert(result.message)
         } else {
             localStorage.setItem("access_token", result.data.access_token);
-            alert("You have successfully authorized")
+            setIsAuthenticated(true)
         }
     };
 

@@ -9,7 +9,7 @@ export const client = async (url, options = {}) => {
         ...options?.headers,
       },
     };
-    
+  
     const response = await fetch(`${baseURL}${url}`, {
       ...defaultOptions,
       ...options,

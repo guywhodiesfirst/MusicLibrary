@@ -1,5 +1,4 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -49,4 +48,11 @@ button:disabled {
 .text-input:focus, select:focus {
   outline: none;
   border: 1px solid #64ff86;
+}
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }

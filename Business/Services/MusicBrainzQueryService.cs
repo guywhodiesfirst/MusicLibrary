@@ -1,4 +1,6 @@
-﻿using Business.Interfaces;
+﻿using AutoMapper;
+using Business.Interfaces;
+using Business.Models.Albums;
 using Business.Models.MusicBrainz;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
@@ -9,13 +11,15 @@ namespace Business.Services
     public class MusicBrainzQueryService : IMusicBrainzQueryService
     {
         private readonly HttpClient _httpClient;
-        public MusicBrainzQueryService(HttpClient client)
+        private readonly IMapper _mapper;
+        public MusicBrainzQueryService(HttpClient client, IMapper mapper)
         {
             _httpClient = client;
             _httpClient.DefaultRequestHeaders.UserAgent.Clear();
             _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Cassette", "1.0"));
+            _mapper = mapper;
         }
-        public async Task<MusicBrainzReleaseGroup> GetAlbumByIdAsync(Guid albumId)
+        public async Task<AlbumDto> GetAlbumByIdAsync(Guid albumId)
         {
             if (albumId == Guid.Empty)
             {
@@ -32,10 +36,10 @@ namespace Business.Services
                 PropertyNameCaseInsensitive = true
             });
 
-            return result;
+            return _mapper.Map<AlbumDto>(result);
         }
 
-        public async Task<MusicBrainzSearchResponse> GetAlbumsByNameAsync(string searchQuery)
+        public async Task<IEnumerable<AlbumDto>> GetAlbumsByNameAsync(string searchQuery)
         {
             if (string.IsNullOrWhiteSpace(searchQuery))
             {
@@ -53,7 +57,7 @@ namespace Business.Services
                 PropertyNameCaseInsensitive = true
             });
 
-            return searchResult;
+            return _mapper.Map<IEnumerable<AlbumDto>>(searchResult.Albums);
         }
     }
 }

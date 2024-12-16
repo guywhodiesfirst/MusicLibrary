@@ -20,6 +20,12 @@ namespace Business
                 .ForMember(a => a.Artists, mbrg => mbrg.MapFrom(x => x.ArtistCredit.Select(ac => ac.Name)))
                 .ForMember(a => a.ReleaseDate, mbrg => mbrg.MapFrom(x => ParseReleaseDate(x.FirstReleaseDate)));
 
+            CreateMap<MusicBrainzReleaseGroup, AlbumDto>()
+                .ForMember(a => a.Name, mbrg => mbrg.MapFrom(x => x.Title))
+                .ForMember(a => a.Genre, mbrg => mbrg.MapFrom(x => x.Tags.OrderByDescending(t => t.Count).Select(t => t.Name).FirstOrDefault()))
+                .ForMember(a => a.Artists, mbrg => mbrg.MapFrom(x => x.ArtistCredit.Select(ac => ac.Name)))
+                .ForMember(a => a.ReleaseDate, mbrg => mbrg.MapFrom(x => ParseReleaseDate(x.FirstReleaseDate)));
+
             CreateMap<Album, AlbumDto>()
                 .ReverseMap();
 

@@ -1,0 +1,38 @@
+.navbar {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 38px;
+    background-color: rgb(72, 108, 122);
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+    align-items: center;
+  }
+  
+  .navbar--menu {
+    display: flex;
+    gap: 20px;
+    list-style-type: none;
+  }
+  
+  .navbar--menu li {
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .navbar--menu a{
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  
+  .navbar--menu li:hover,
+  .navbar--menu li a:hover {
+    color: rgb(107, 189, 214);
+  }
+
+  .navbar--logo {
+    cursor: pointer;
+    font-size: 30px;
+  }
