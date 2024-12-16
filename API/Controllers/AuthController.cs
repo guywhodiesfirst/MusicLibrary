@@ -21,30 +21,31 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequestDto request)
         {
+            Console.WriteLine("hello");
             try
             {
                 var result = await _authService.Login(request);
-                return Ok(result);
+                return Ok(new {success = true, data = result});
             }
             catch (Exception ex)
             {
-                return Unauthorized(ex.Message);
+                return Unauthorized(new {success = false, message = ex.Message});
             }
         }
 
         // POST: api/auth/register
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Add([FromBody] RegistrationRequestDto model)
+        public async Task<IActionResult> Register([FromBody] RegistrationRequestDto model)
         {
             try
             {
                 await _authService.Register(model);
-                return Ok();
+                return Ok(new {success = true, message = "Registration successful!"});
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new {success = false, message = ex.Message});
             }
         }
     }

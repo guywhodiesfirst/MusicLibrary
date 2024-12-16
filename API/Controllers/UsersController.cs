@@ -81,5 +81,20 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var currentUserId = _controllerHelper.GetCurrentUserId();
+            if (currentUserId == Guid.Empty)
+                return Unauthorized(new {success = false, message = "User not authenticated"});
+
+            var user = await _userService.GetByIdAsync(currentUserId);
+            if (user == null)
+                return NotFound(new { success = false, message = "User not found" });
+
+            return Ok(user);
+        }
     }
 }

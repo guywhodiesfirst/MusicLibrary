@@ -369,3 +369,6 @@ FodyWeavers.xsd
 /API/musicLibrary.db
 /API/musicLibrary.db-shm
 /API/musicLibrary.db-wal
+
+# Vite env file
+/client-app/react-app/.env

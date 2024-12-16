@@ -1,0 +1,16 @@
+.logo {
+    height: 400px;
+}
+
+.home-page {
+    height: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+}

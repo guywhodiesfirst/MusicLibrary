@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import './App.css';
+import HomePage from './Pages/HomePage/HomePage';
+import LoginPage from './Pages/Auth/LoginPage/LoginPage'
+import AlbumSearchPage from './Pages/AlbumSearchPage/AlbumSearchPage'
+import { UsersApi } from './API/UsersApi';
 
-function App() {
-  const [count, setCount] = useState(0)
+export const Context = React.createContext();
+
+export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      setIsAuthenticated(true);
+      fetchUserProfile().finally(() => setLoading(false));
+    } else {
+      setIsAuthenticated(false);
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchUserProfile = async () => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      const result = await UsersApi.getCurrentUser();
+      if (!result.success) {
+        console.error(result.message);
+        localStorage.removeItem('access_token');
+        setIsAuthenticated(false);
+        setUser(null);
+      } else {
+        setUser(result.data);
+        setIsAuthenticated(true);
+      }
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Router>
+      <Context.Provider value={{ isAuthenticated, setIsAuthenticated, user }}>
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="*" element={<Navigate to="/home" />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage/>}/>
+          <Route path="/albums" element={<AlbumSearchPage/>}/>
+        </Routes>
+      </Context.Provider>
+    </Router>
+  );
 }
-
-export default App
