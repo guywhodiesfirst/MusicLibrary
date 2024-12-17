@@ -1,11 +1,17 @@
 import React from 'react';
 import './AlbumSearchRow.css';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function AlbumSearchRow({ album }) {
+  const navigate = useNavigate();
+  const handleView = () => {
+    navigate(`/albums/${album.id}`)
+  }
   return (
     <>
         <li className='search-row'>
-            <div className='album-info'>
+            <div>
                 <strong>{album.name}</strong>{' '}
                 {album.artists && (
                 <>
@@ -17,7 +23,7 @@ export default function AlbumSearchRow({ album }) {
                 )} | 
                 Released: {album.releaseDate}
             </div>
-            <button>View</button>
+            <button onClick={handleView}>View</button>
         </li>
     </>
   );

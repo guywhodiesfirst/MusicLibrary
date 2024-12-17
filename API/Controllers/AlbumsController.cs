@@ -25,16 +25,30 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _albumService.GetByIdAsync(id);
-            return result == null ? NotFound("Album not found") : Ok(result);
+            try
+            {
+                var result = await _albumService.GetByIdAsync(id);
+                return result == null ? NotFound("Album not found") : Ok(result);
+            }
+            catch (Exception ex)
+            { 
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET: api/albums/{id}/details
         [HttpGet("{id}/details")]
         public async Task<IActionResult> GetByIdWithDetails(Guid id)
         {
-            var result = await _albumService.GetByIdWithDetailsAsync(id);
-            return result == null ? NotFound("Album not found") : Ok(result);
+            try
+            {
+                var result = await _albumService.GetByIdWithDetailsAsync(id);
+                return result == null ? NotFound("Album not found") : Ok(result);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Server does not respond. Try again later");
+            }
         }
 
         // DELETE: api/albums/{id}

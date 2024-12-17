@@ -35,6 +35,10 @@ namespace Business
                 .ForMember(dto => dto.PlaylistIds, a => a.MapFrom(x => x.Playlists.Select(p => p.Id)))
                 .ReverseMap();
 
+            CreateMap<AlbumDto, AlbumDetailsDto>()
+                .ForMember(details => details.ReviewCount, dto => dto.MapFrom(src => 0))
+                .ReverseMap();
+
             CreateMap<Playlist, PlaylistCreateDto>()
                 .ReverseMap();
 

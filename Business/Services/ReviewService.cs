@@ -124,7 +124,7 @@ namespace Business.Services
         public async Task<IEnumerable<ReviewDto>> GetAllByAlbumIdAsync(Guid albumId)
         {
             var reviews = await _unitOfWork.ReviewRepository.GetAllWithDetailsAsync();
-            var reviewsByAlbum = reviews.Where(r => r.AlbumId == albumId);
+            var reviewsByAlbum = reviews.Where(r => r.AlbumId == albumId).ToList();
             return reviewsByAlbum == null ? Enumerable.Empty<ReviewDto>() 
                 : _mapper.Map<IEnumerable<ReviewDto>>(reviewsByAlbum.OrderByDescending(r => r.LastUpdatedAt));
         }

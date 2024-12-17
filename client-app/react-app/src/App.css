@@ -39,10 +39,17 @@ button:disabled {
 
 .text-input, select {
   height: 36px;
+}
+
+.text-input, select, textarea {  
   border-radius: 6px;
   border: 1px solid gainsboro;
   padding-left: 6px;
   flex-grow: 1;
+}
+
+textarea {
+  font-family: Montserrat;
 }
 
 .text-input:focus, select:focus {
@@ -55,4 +62,5 @@ button:disabled {
   display: flex;
   justify-content: center;
   flex-direction: column;
+  margin-top: 18px;
 }

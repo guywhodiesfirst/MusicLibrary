@@ -33,7 +33,6 @@ namespace Business.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
                     throw new MusicLibraryException("Error while trying to add an album: ", ex);
                 }
                 await _unitOfWork.SaveChangesAsync();
@@ -68,15 +67,39 @@ namespace Business.Services
         public async Task<AlbumDto> GetByIdAsync(Guid id)
         {
             var albumInDb = await _unitOfWork.AlbumRepository.GetByIdWithDetailsAsync(id);
-            return albumInDb == null ? null 
-                : _mapper.Map<AlbumDto>(albumInDb);
+            if(albumInDb != null) 
+                return _mapper.Map<AlbumDto>(albumInDb);
+            else
+            {
+                try
+                {
+                    var musicBrainzAlbum = await _musicBrainzQueryService.GetAlbumByIdAsync(id);
+                    return musicBrainzAlbum ?? null;
+                }
+                catch (Exception)
+                {
+                    throw new MusicLibraryException("Error while trying to find an album");
+                }
+            }
         }
 
         public async Task<AlbumDetailsDto> GetByIdWithDetailsAsync(Guid id)
         {
             var albumInDb = await _unitOfWork.AlbumRepository.GetByIdWithDetailsAsync(id);
-            return albumInDb == null ? null 
-                : _mapper.Map<AlbumDetailsDto>(albumInDb);
+            if (albumInDb != null)
+                return _mapper.Map<AlbumDetailsDto>(albumInDb);
+            else
+            {
+                try
+                {
+                    var musicBrainzAlbum = await _musicBrainzQueryService.GetAlbumByIdAsync(id);
+                    return _mapper.Map<AlbumDetailsDto>(musicBrainzAlbum) ?? null;
+                }
+                catch (Exception)
+                {
+                    throw new MusicLibraryException("Error while trying to find an album");
+                }
+            }
         }
 
         public async Task UpdateAlbumRatingByIdAsync(Guid id)

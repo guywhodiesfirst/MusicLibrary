@@ -32,7 +32,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllByAlbumId(Guid albumId)
         {
             var result = await _reviewService.GetAllByAlbumIdAsync(albumId);
-            return Ok(result);
+            return Ok(new {success = true, reviews = result});
         }
 
         // GET: api/reviews/{id}
@@ -50,7 +50,8 @@ namespace API.Controllers
         public async Task<IActionResult> GetByIdWithDetails(Guid id)
         {
             var result = await _reviewService.GetByIdWithDetailsAsync(id);
-            return result == null ? NotFound("Review not found") : Ok(result);
+            return result == null ? NotFound(new {success = false, message = "Review not found"}) 
+                : Ok(new {success = true, review = result});
         }
 
         // POST: "api/albums/{albumId}/reviews"
@@ -61,7 +62,7 @@ namespace API.Controllers
             var currentUserId = _controllerHelper.GetCurrentUserId();
             if (currentUserId == Guid.Empty)
             {
-                return Unauthorized();
+                return Unauthorized(new {success = false, message = "Not authorized"});
             }
             model.AlbumId = albumId;
             model.UserId = currentUserId;
@@ -69,11 +70,11 @@ namespace API.Controllers
             {
                 await _reviewService.AddAsync(model);
 
-                return Ok();
+                return Ok(new {success = true});
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new {success = false, message = ex.Message});
             }
         }
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { client } from '../../API/client';
 import AlbumSearchRow from '../../Components/AlbumSearchRow/AlbumSearchRow';
 import "./AlbumSearchPage.css";
+import { AlbumsApi } from '../../API/AlbumsApi';
 
 export default function AlbumSearchPage() {
   const [query, setQuery] = useState('');
@@ -17,29 +17,30 @@ export default function AlbumSearchPage() {
 
     setError(null);
     setIsSearching(true);
+
     try {
-      const response = await client(`MusicBrainz/albums/search?query=${encodeURIComponent(query)}`);
-      if (response.error) {
-        setError(response.message || 'An error occurred while fetching albums.');
-      } else if (response.length === 0) {
-        setError('No albums found in the response.');
-        setAlbums([]);
+      const response = await AlbumsApi.searchAlbums(query)
+      if(!response.success) {
+        setError(response.message)
+      } else if (response.albums.length === 0) {
+        setError("No albums found by the given criteria")
+        setAlbums([])
       } else {
-        setAlbums(response.map((album) => ({
+        setAlbums(response.albums.map((album) => ({
           id: album.id,
           name: album.name,
           genre: album.genre || null,
           averageRating: album.averageRating,
           releaseDate: album.releaseDate ? new Date(album.releaseDate).toLocaleDateString() : 'Unknown',
           artists: album.artists ? album.artists.join(', ') : null,
-        })));
+        })))
       }
-    } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+    } catch(error) {
+      setError("Unexpected error. Try again")
     } finally {
-      setIsSearching(false); // Завершити процес пошуку
+      setIsSearching(false)
     }
-  };
+  }
 
   return (
     <div style={{ padding: '20px' }}>

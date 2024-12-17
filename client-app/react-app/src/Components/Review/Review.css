@@ -1,0 +1,38 @@
+.review {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 14px;
+    background-color: rgb(15, 15, 15);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.review-info {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid;
+    align-items: center;
+}
+
+.review-content {
+    text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.5;
+}
+
+.review-info-prop-label, .review-info-prop {
+    margin-right: 6px;
+}
+
+.review-info-prop-label {
+    font-weight: 700;
+}
+
+.review-info-prop {
+    font-weight: 400;
+}

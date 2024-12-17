@@ -372,3 +372,5 @@ FodyWeavers.xsd
 
 # Vite env file
 /client-app/react-app/.env
+/Business/ClassDiagram1.cd
+/Data/ClassDiagram1.cd

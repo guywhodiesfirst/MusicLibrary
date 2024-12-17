@@ -7,6 +7,7 @@ import AlbumSearchPage from './Pages/AlbumSearchPage/AlbumSearchPage';
 import { UsersApi } from './API/UsersApi';
 import RegistrationPage from './Pages/Auth/RegistrationPage/RegistrationPage';
 import Navbar from './Components/UI/Navbar/Navbar';
+import AlbumPage from './Pages/AlbumPage/AlbumPage';
 
 export const Context = React.createContext();
 
@@ -67,6 +68,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/albums" element={<AlbumSearchPage />} />
+          <Route path="/albums/:id" element={<AlbumPage />} />
         </Routes>
       </div>
     </Context.Provider>
