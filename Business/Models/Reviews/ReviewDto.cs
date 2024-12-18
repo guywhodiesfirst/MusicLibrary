@@ -10,6 +10,7 @@
         public int Likes { get; set; }
         public int Dislikes { get; set; }
         public string Content { get; set; }
+        public int CommentCount { get; set; }
         public DateTime LastUpdatedAt { get; set; }
         public DateTime CreatedAt { get; set; }
     }

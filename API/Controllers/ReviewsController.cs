@@ -1,6 +1,7 @@
 ﻿using API.Interfaces;
 using Business.Interfaces;
 using Business.Models.Reviews;
+using Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -152,8 +153,17 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return BadRequest(ex.Message);
             }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("api/reviews/reactions/by-review-user")]
+        public async Task<IActionResult> GetReaction([FromQuery] Guid reviewId, [FromQuery] Guid userId)
+        {
+            var result = await _reviewService.GetReactionByReviewUserIdAsync(reviewId, userId);
+            return result == null ? NotFound() : Ok(result);
         }
 
         // PUT: api/reviews/reactions/{reactionId}

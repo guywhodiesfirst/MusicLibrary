@@ -93,8 +93,10 @@ namespace Business.Services
             if (reactionInDb == null)
                 throw new MusicLibraryException("Reaction not found");
 
-            var review = reactionInDb.Review;
+            var reviewId = reactionInDb.ReviewId;
             await _unitOfWork.ReviewReactionRepository.DeleteByIdAsync(reactionId);
+            await _unitOfWork.SaveChangesAsync();
+            var review = await _unitOfWork.ReviewRepository.GetByIdWithDetailsAsync(reviewId);
             await UpdateReviewLikesDislikes(review);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -167,8 +169,10 @@ namespace Business.Services
 
         private async Task UpdateReviewLikesDislikes(Review review)
         {
-            review.Likes = review.Reactions.Where(rr => rr.IsLike == true).Count();
-            review.Dislikes = review.Reactions.Where(rr => rr.IsLike == false).Count();
+            var likeReactions = review.Reactions.Where(rr => rr.IsLike == true).ToList();
+            var dislikeReactions = review.Reactions.Where(rr => rr.IsLike == false).ToList();
+            review.Likes = likeReactions.Count;
+            review.Dislikes = dislikeReactions.Count;
             await _unitOfWork.ReviewRepository.UpdateAsync(review);
         }
 
@@ -207,6 +211,13 @@ namespace Business.Services
             var review = reviews.FirstOrDefault(r => r.AlbumId == albumId && r.UserId == userId);
             return review == null ? null
                 : _mapper.Map<ReviewDto>(review);
+        }
+
+        public async Task<ReviewReactionDto> GetReactionByReviewUserIdAsync(Guid reviewId, Guid userId)
+        {
+            var reaction = await _unitOfWork.ReviewReactionRepository.GetByUserReviewIdAsync(userId, reviewId);
+            return reaction == null ? null
+                : _mapper.Map<ReviewReactionDto>(reaction);
         }
     }
 }

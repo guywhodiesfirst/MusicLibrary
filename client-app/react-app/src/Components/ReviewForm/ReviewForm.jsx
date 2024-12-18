@@ -21,6 +21,11 @@ export default function ReviewForm({ userReview, onSubmit, onUpdate, onDelete })
     }
   };
 
+  const handleDelete = () => {
+    onDelete()
+    setContent('')
+  }
+
   return (
     <div className="review-form">
       <h2>{userReview ? "Edit your Review" : "Write a Review"}</h2>
@@ -44,7 +49,7 @@ export default function ReviewForm({ userReview, onSubmit, onUpdate, onDelete })
       </div>
       <br />
       <button onClick={handleSubmit}>{userReview ? "Update Review" : "Submit Review"}</button>
-      {userReview && <button onClick={onDelete} style={{marginLeft: "10px"}}>Delete Review</button>}
+      {userReview && <button onClick={handleDelete} style={{marginLeft: "10px"}}>Delete Review</button>}
     </div>
   );
 }

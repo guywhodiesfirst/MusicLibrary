@@ -12,6 +12,7 @@ namespace Business.Interfaces
         Task<ReviewDetailsDto> GetByIdWithDetailsAsync(Guid modelId);
         Task<ReviewDto> GetByAlbumUserIdAsync(Guid albumId, Guid userId);
         Task<IEnumerable<ReviewDto>> GetAllByAlbumIdAsync(Guid albumId);
+        Task<ReviewReactionDto> GetReactionByReviewUserIdAsync(Guid reviewId, Guid userId);
         Task AddReactionAsync(ReviewReactionDto reactionModel);
         Task UpdateReactionAsync(Guid reactionId);
         Task DeleteReactionAsync(Guid reactionId);

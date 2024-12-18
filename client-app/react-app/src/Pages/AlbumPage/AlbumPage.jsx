@@ -1,11 +1,13 @@
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState, useContext } from "react";
+import { Context } from "../../App";
 import "./AlbumPage.css";
 import { AlbumsApi } from "../../API/AlbumsApi";
-import ReviewForm from "../../Components/ReviewForm/ReviewForm";
-import { Context } from "../../App";
 import { ReviewsApi } from "../../API/ReviewsApi";
-import Review from "../../Components/Review/Review";
+import AlbumInfo from "../../Components/AlbumInfo/AlbumInfo";
+import ReviewSection from "../../Components/ReviewSection/ReviewSection";
+import Loader from "../../Components/UI/Loader/Loader";
+import ErrorMessage from "../../Components/UI/ErrorMessage/ErrorMessage";
 
 export default function AlbumPage() {
   const { id } = useParams();
@@ -19,7 +21,6 @@ export default function AlbumPage() {
 
   const fetchAlbum = async (albumId) => {
     setError(null);
-
     try {
       const response = await AlbumsApi.getAlbum(albumId);
       if (!response.success) {
@@ -27,20 +28,37 @@ export default function AlbumPage() {
       } else {
         setAlbum(response.album);
       }
-    } catch (error) {
+    } catch {
       setError("Unexpected error while fetching album details. Try again.");
     }
   };
 
   const fetchUserReview = async () => {
+    if (!user) return;
     try {
       const response = await ReviewsApi.getByAlbumUser(id, user.id);
-      console.log(response)
       if (response.success) {
         setUserReview(response.review);
       }
-    } catch (error) {
-      console.error("Failed to fetch user review:", error.message);
+    } catch {
+      console.error("Failed to fetch user review.");
+    }
+  };
+
+  const fetchReviews = async () => {
+    try {
+      setIsLoading(true)
+      const response = await ReviewsApi.getReviewsByAlbum(id);
+      console.log(response)
+      if (response.success) {
+        setReviews(response.reviews);
+      } else {
+        alert(response.message);
+      }
+    } catch(error) {
+      alert(error);
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -48,47 +66,53 @@ export default function AlbumPage() {
     try {
       const response = await ReviewsApi.submitReview(id, review);
       if (response.success) {
-        fetchReviews();
-        fetchAlbum(id);
-        fetchUserReview();
+        await fetchReviews();
+        await fetchAlbum(id);
+        await fetchUserReview();
       } else {
         alert(response.message);
       }
-    } catch (error) {
+    } catch {
       alert("Unexpected error while trying to submit review. Try again.");
     }
   };
 
   const handleReviewUpdate = async (review) => {
+    if (!userReview) return;
     try {
+      setIsLoading(true)
       const response = await ReviewsApi.updateReview(userReview.id, review);
       if (response.success) {
-        fetchReviews();
-        fetchAlbum(id);
-        fetchUserReview();
+        await fetchReviews();
+        await fetchAlbum(id);
+        await fetchUserReview();
       } else {
         alert(response.message);
       }
-    } catch (error) {
+    } catch {
       alert("Unexpected error while trying to update review. Try again.");
+    } finally {
+      setIsLoading(false)
     }
   };
 
   const handleReviewDelete = async () => {
-    setIsLoading(true)
+    if (!userReview) return;
     try {
+      setIsLoading(true)
       const response = await ReviewsApi.deleteReview(userReview.id);
       if (response.success) {
-        fetchReviews();
-        fetchAlbum(id);
         setUserReview(null);
+        await fetchReviews();
+        await fetchAlbum(id);
       } else {
         alert(response.message);
       }
-    } catch (error) {
+    } catch {
       alert("Unexpected error while trying to delete review. Try again.");
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   };
 
   const handleViewReviews = async () => {
@@ -96,92 +120,45 @@ export default function AlbumPage() {
     fetchReviews();
   };
 
-  const fetchReviews = async () => {
+  const fetchData = async () => {
+    setIsLoading(true);
     try {
-      const response = await ReviewsApi.getReviewsByAlbum(id);
-      if (!response.success) {
-        alert(response.message);
-      } else {
-        setReviews(response.reviews);
+      await fetchAlbum(id);
+      if (isAuthenticated && user) {
+        await fetchUserReview();
       }
-    } catch (error) {
-      alert("Unexpected error while trying to load reviews. Try again.");
+      await fetchReviews();
+    } catch {
+      setError("Unexpected error while fetching data. Try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    setIsLoading(true)
-    if (id) {
-      fetchAlbum(id);
-      if (isAuthenticated && user) {
-        fetchUserReview();
-      }
-    }
-    setIsLoading(false)
+    if (id) fetchData();
   }, [id, isAuthenticated, user]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return (
-      <div>
-        <p>Error: {error}</p>
-      </div>
-    );
-  }
-
-  if (!album) {
-    return <p>No album data available</p>;
-  }
+  if (isLoading) return <Loader />;
+  if (error) return <ErrorMessage message={error} />;
+  if (!album) return <p>No album data available</p>;
 
   return (
     <div className="album-page">
       <div className="album-wrapper">
-        <div className="album-container">
-          <h2>Album info</h2>
-          <div className="album-info">
-            <p>Album name: {album.name}</p>
-            {album.artists && <p>By: {album.artists}</p>}
-            {album.genre && <p>Genre: {album.genre}</p>}
-            {album.averageRating !== 0 && <p>Average rating: {album.averageRating}/10</p>}
-            {album.releaseDate && (
-              <p>Released on: {new Date(album.releaseDate).toLocaleDateString()}</p>
-            )}
-          </div>
-        </div>
-        <div className="reviews-container">
-          {isAuthenticated ? (
-            <ReviewForm
-              userReview={userReview}
-              onSubmit={handleReviewSubmit}
-              onUpdate={handleReviewUpdate}
-              onDelete={handleReviewDelete}
-            />
-          ) : (
-            <h3>Please authorize to review</h3>
-          )}
-          <div className="view-reviews-section">
-            <h2>Reviews</h2>
-            <button
-              onClick={handleViewReviews}
-              disabled={album.reviewCount === 0 || reviewsVisible}
-              className="view-reviews-btn"
-            >
-              View Reviews({album.reviewCount})
-            </button>
-            {reviewsVisible && (
-              <div className="reviews-list">
-                {reviews.length > 0 ? (
-                  reviews.map((review) => <Review key={review.id} review={review} />)
-                ) : (
-                  <p>No reviews yet.</p>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
+        <AlbumInfo album={album} />
+        <ReviewSection
+          isAuthenticated={isAuthenticated}
+          userReview={userReview}
+          handleReviewSubmit={handleReviewSubmit}
+          handleReviewUpdate={handleReviewUpdate}
+          handleReviewDelete={handleReviewDelete}
+          reviewsVisible={reviewsVisible}
+          reviews={reviews}
+          album={album}
+          handleViewReviews={handleViewReviews}
+          onReviewUpdates={fetchReviews}
+        />
       </div>
     </div>
   );

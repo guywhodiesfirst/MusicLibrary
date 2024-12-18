@@ -30,6 +30,8 @@
     white-space: normal;
     word-break: break-word;
     line-height: 1.5;
+    border-bottom: 1px solid;
+    margin-bottom: 14px;
 }
 
 .review-info-prop-label, .review-info-prop {
@@ -42,4 +44,26 @@
 
 .review-info-prop {
     font-weight: 400;
+}
+
+.review-footer {
+    display: flex;
+    gap: 10px;
+}
+
+.like-btn {
+    background-color: rgb(55, 185, 99);
+}
+
+.dislike-btn {
+    background-color: rgb(167, 23, 23);
+}
+
+.loading {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.active {
+    color: rgb(16, 0, 107);
 }

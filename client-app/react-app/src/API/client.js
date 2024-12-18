@@ -6,33 +6,34 @@ export const client = async (url, options = {}) => {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${accessToken}`,
-      ...options?.headers,
+      ...options.headers,
     },
   };
 
-  const response = await fetch(`${baseURL}${url}`, {
-    ...defaultOptions,
-    ...options,
-  });
+  try {
+    const response = await fetch(`${baseURL}${url}`, {
+      ...defaultOptions,
+      ...options,
+    });
 
-  const hasContent = response.headers.get('Content-Length') > 0 || 
-                     response.headers.get('Content-Type')?.includes('application/json');
+    if (!response.ok) {
+      if (response.status === 404) {
+        return { error: true, status: 404, message: 'Not found' };
+      }
 
-  if (!response.ok) {
-    if (hasContent) {
-      const errorResponse = await response.json();
-      return {
-        error: true,
-        status: response.status,
-        message: errorResponse.message,
-      };
+      if (response.headers.get('Content-Type')?.includes('application/json')) {
+        const errorResponse = await response.json();
+        return { error: true, status: response.status, message: errorResponse.message || 'Server error' };
+      }
+
+      return { error: true, status: response.status, message: 'An error occurred' };
     }
-    return {
-      error: true,
-      status: response.status,
-      message: 'An error occurred, but no message was provided by the server.',
-    };
-  }
 
-  return (hasContent) ? response.json() : {};
+    return response.ok && response.headers.get('Content-Type')?.includes('application/json')
+      ? await response.json()
+      : {};
+  } catch (error) {
+    console.error('Network or unexpected error:', error);
+    return { error: true, status: 500, message: 'Network error or unexpected issue' };
+  }
 };

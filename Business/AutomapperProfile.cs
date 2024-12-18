@@ -77,6 +77,7 @@ namespace Business
             CreateMap<Review, ReviewDto>()
                 .ForMember(dto => dto.AlbumName, r => r.MapFrom(x => x.Album.Name))
                 .ForMember(dto => dto.Username, r => r.MapFrom(x => x.User.Username))
+                .ForMember(dto => dto.CommentCount, r => r.MapFrom(x => x.Comments.Count))
                 .ReverseMap();
 
             CreateMap<Review, ReviewCreateDto>()
