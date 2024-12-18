@@ -1,5 +1,6 @@
 .auth--page {
-    max-width: 1600px;
+    align-items: center;
+    justify-content: center;
     padding: 20px;
     height: 60vh;
     box-sizing: border-box;
