@@ -88,11 +88,11 @@ namespace API.Controllers
         {
             var currentUserId = _controllerHelper.GetCurrentUserId();
             if (currentUserId == Guid.Empty)
-                return Unauthorized(new {success = false, message = "User not authenticated"});
+                return Unauthorized();
 
             var user = await _userService.GetByIdAsync(currentUserId);
             if (user == null)
-                return NotFound(new { success = false, message = "User not found" });
+                return NotFound();
 
             return Ok(user);
         }

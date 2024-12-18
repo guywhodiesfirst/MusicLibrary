@@ -15,7 +15,7 @@ export class AuthApi {
                 body: JSON.stringify(formData),
             });
 
-            if (!response.ok) {
+            if (response.error) {
                 return {
                     success: false,
                     message: response.message,
@@ -42,14 +42,17 @@ export class AuthApi {
                 body: JSON.stringify(formData),
             });
             
-            if (!response.success) {
+            if (response.error) {
                 return {
                     success: false,
                     message: "Authorization error"
                 }
             } 
             
-            return response
+            return {
+                success: true,
+                access_token: response.access_token
+            }
         } catch (error) {
             return {
                 success: false,

@@ -10,10 +10,17 @@
 .review-info {
     font-weight: bold;
     margin-bottom: 8px;
+    padding-bottom: 8px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap:0;
     border-bottom: 1px solid;
-    align-items: center;
+    align-items: flex-start;
+    justify-content:left;
+}
+
+.review-info > p {
+    margin-bottom: 0;
 }
 
 .review-content {

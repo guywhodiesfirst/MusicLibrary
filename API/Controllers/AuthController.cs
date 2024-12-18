@@ -25,11 +25,11 @@ namespace API.Controllers
             try
             {
                 var result = await _authService.Login(request);
-                return Ok(new {success = true, data = result});
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return Unauthorized(new {success = false, message = ex.Message});
+                return Unauthorized(ex.Message);
             }
         }
 
@@ -41,11 +41,11 @@ namespace API.Controllers
             try
             {
                 await _authService.Register(model);
-                return Ok(new {success = true, message = "Registration successful!"});
+                return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest(new {success = false, message = ex.Message});
+                return BadRequest(ex.Message);
             }
         }
     }

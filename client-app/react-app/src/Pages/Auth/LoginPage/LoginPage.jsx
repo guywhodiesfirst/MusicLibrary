@@ -30,7 +30,7 @@ export default function Login() {
         if (!result.success) {
             alert(result.message)
         } else {
-            localStorage.setItem("access_token", result.data.access_token);
+            localStorage.setItem("access_token", result.access_token);
             setIsAuthenticated(true)
         }
     };

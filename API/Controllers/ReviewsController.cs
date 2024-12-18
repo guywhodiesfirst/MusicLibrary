@@ -44,14 +44,22 @@ namespace API.Controllers
             return result == null ? NotFound("Review not found") : Ok(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet("api/reviews/by-album-user")]
+        public async Task<IActionResult> GetByAlbumUserId([FromQuery] Guid albumId, [FromQuery] Guid userId)
+        {
+            var result = await _reviewService.GetByAlbumUserIdAsync(albumId, userId);
+            return result == null ? NotFound() : Ok(result);
+        }
+
         // GET: api/reviews/{id}/details
         [AllowAnonymous]
         [HttpGet("api/reviews/{id}/details")]
         public async Task<IActionResult> GetByIdWithDetails(Guid id)
         {
             var result = await _reviewService.GetByIdWithDetailsAsync(id);
-            return result == null ? NotFound(new {success = false, message = "Review not found"}) 
-                : Ok(new {success = true, review = result});
+            return result == null ? NotFound() 
+                : Ok(result);
         }
 
         // POST: "api/albums/{albumId}/reviews"
@@ -62,7 +70,7 @@ namespace API.Controllers
             var currentUserId = _controllerHelper.GetCurrentUserId();
             if (currentUserId == Guid.Empty)
             {
-                return Unauthorized(new {success = false, message = "Not authorized"});
+                return Unauthorized();
             }
             model.AlbumId = albumId;
             model.UserId = currentUserId;
@@ -70,11 +78,11 @@ namespace API.Controllers
             {
                 await _reviewService.AddAsync(model);
 
-                return Ok(new {success = true});
+                return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest(new {success = false, message = ex.Message});
+                return BadRequest(ex.Message);
             }
         }
 

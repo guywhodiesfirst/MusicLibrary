@@ -74,11 +74,15 @@ namespace Business.Services
 
         public async Task DeleteAsync(Guid modelId)
         {
-            bool reviewExists = await _unitOfWork.ReviewRepository.GetByIdAsync(modelId) != null;
-            if (!reviewExists)
+
+            var review = await _unitOfWork.ReviewRepository.GetByIdAsync(modelId);
+            if (review == null)
                 throw new MusicLibraryException("Review does not exist");
 
+            var albumId = review.AlbumId;
+            
             await _unitOfWork.ReviewRepository.DeleteByIdAsync(modelId);
+            await _albumService.UpdateAlbumRatingByIdAsync(albumId);
             await _unitOfWork.SaveChangesAsync();
         }
 
@@ -195,6 +199,14 @@ namespace Business.Services
         {
             var reaction = await _unitOfWork.ReviewReactionRepository.GetByIdAsync(reactionId);
             return reaction != null && reaction.UserId == userId;
+        }
+
+        public async Task<ReviewDto> GetByAlbumUserIdAsync(Guid albumId, Guid userId)
+        {
+            var reviews = await _unitOfWork.ReviewRepository.GetAllWithDetailsAsync();
+            var review = reviews.FirstOrDefault(r => r.AlbumId == albumId && r.UserId == userId);
+            return review == null ? null
+                : _mapper.Map<ReviewDto>(review);
         }
     }
 }

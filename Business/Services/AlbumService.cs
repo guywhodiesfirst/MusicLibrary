@@ -105,7 +105,7 @@ namespace Business.Services
         public async Task UpdateAlbumRatingByIdAsync(Guid id)
         {
             var album = await _unitOfWork.AlbumRepository.GetByIdWithDetailsAsync(id);
-            decimal newRating = (decimal)album.Reviews.Average(x => x.Rating);
+            decimal newRating = album.Reviews.Count == 0? 0 : (decimal)album.Reviews.Average(x => x.Rating);
             album.AverageRating = newRating;
             await _unitOfWork.AlbumRepository.UpdateAsync(album);
             await _unitOfWork.SaveChangesAsync();
