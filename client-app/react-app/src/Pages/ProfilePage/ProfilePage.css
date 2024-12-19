@@ -1,0 +1,12 @@
+.user-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-wrapper {
+    max-width: 1200px;
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 2fr 3fr;
+}

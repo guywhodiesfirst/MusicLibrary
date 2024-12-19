@@ -44,19 +44,19 @@ namespace API.Controllers
             return result == null ? NotFound("User not found") : Ok(result);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            try
-            {
-                await _userService.DeleteAsync(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
+        // [HttpDelete("{id}")]
+        // public async Task<IActionResult> Delete(Guid id)
+        // {
+        //     try
+        //     {
+        //         await _userService.DeleteAsync(id);
+        //         return Ok();
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return NotFound(ex.Message);
+        //     }
+        // }
 
         [Authorize]
         [HttpPut("{userId}")]

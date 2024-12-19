@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Context } from "../../App";
-import { ReviewsApi } from "../../API/ReviewsApi";
 import Review from "../Review/Review";
 import ReviewForm from "../ReviewForm/ReviewForm";
 import './ReviewSection.css'
@@ -16,17 +15,14 @@ export default function ReviewSection({
   handleViewReviews,
   onReviewUpdates
 }) {
-    const { isAuthenticated, user } = useContext(Context);
-    const [isLoading, setIsLoading] = useState(false);
+    const { isAuthenticated } = useContext(Context);
 
     const handleReactionUpdate = () => {
-        console.log("УРАААА")
-        onReviewUpdates(); // Фетчимо огляди після оновлення реакцій
-        console.log(reviews)
+        onReviewUpdates();
     };
 
     return (
-        <div className="reviews-container">
+        <div>
             {isAuthenticated ? (
                 <ReviewForm
                     userReview={userReview}
@@ -37,7 +33,7 @@ export default function ReviewSection({
             ) : (
                 <h3>Please authorize to review</h3>
             )}
-            <div className="view-reviews-section">
+            <div>
                 <h2>Reviews</h2>
                 <button
                     onClick={handleViewReviews}

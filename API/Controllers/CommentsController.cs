@@ -27,18 +27,10 @@ namespace API.Controllers
         // GET: api/reviews/{reviewId}/comments
         [AllowAnonymous]
         [HttpGet("api/reviews/{reviewId}/comments")]
-        public async Task<IActionResult> GetAllByAlbumId(Guid reviewId)
+        public async Task<IActionResult> GetAllByReviewId(Guid reviewId)
         {
             var result = await _commentService.GetAllByReviewIdAsync(reviewId);
             return Ok(result);
-        }
-
-        [AllowAnonymous]
-        [HttpGet("api/reviews/comments/{id}")]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            var result = await _commentService.GetByIdAsync(id);
-            return result == null ? NotFound("Comment not found") : Ok(result);
         }
 
         [Authorize]
@@ -54,28 +46,6 @@ namespace API.Controllers
             try
             {
                 await _commentService.AddAsync(model);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [Authorize]
-        [HttpDelete("api/reviews/comments/{commentId}")]
-        public async Task<IActionResult> DeleteReaction(Guid commentId)
-        {
-            var currentUserId = _controllerHelper.GetCurrentUserId();
-            if (currentUserId == Guid.Empty)
-                return Unauthorized();
-
-            if (!await _commentService.IsUserCommentOwnerAsync(currentUserId, commentId))
-                return Forbid();
-
-            try
-            {
-                await _commentService.DeleteAsync(commentId);
                 return Ok();
             }
             catch (Exception ex)

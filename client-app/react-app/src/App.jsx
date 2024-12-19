@@ -8,6 +8,7 @@ import { UsersApi } from './API/UsersApi';
 import RegistrationPage from './Pages/Auth/RegistrationPage/RegistrationPage';
 import Navbar from './Components/UI/Navbar/Navbar';
 import AlbumPage from './Pages/AlbumPage/AlbumPage';
+import ProfilePage from './Pages/ProfilePage/ProfilePage';
 
 export const Context = React.createContext();
 
@@ -41,7 +42,6 @@ function App() {
     if (token) {
       const result = await UsersApi.getCurrentUser();
       if (!result.success) {
-        console.error(result.message);
         localStorage.removeItem('access_token');
         setIsAuthenticated(false);
         setUser(null);
@@ -69,6 +69,8 @@ function App() {
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/albums" element={<AlbumSearchPage />} />
           <Route path="/albums/:id" element={<AlbumPage />} />
+          <Route path="/users/:id" element={<ProfilePage />}/>
+          {user && <Route path="/me" element= {<Navigate to={`/users/${user.id}`}/>}/>}
         </Routes>
       </div>
     </Context.Provider>

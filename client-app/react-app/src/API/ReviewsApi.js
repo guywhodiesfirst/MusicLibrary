@@ -2,7 +2,6 @@ import { client } from "./client";
 
 export class ReviewsApi {
     static async submitReview(albumId, review) {
-        console.log(albumId, review)
         try {
             const response = await client(`albums/${albumId}/reviews`, {
                 method: 'POST',

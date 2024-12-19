@@ -1,0 +1,26 @@
+.comment {
+    background-color: rgb(43, 43, 43);
+    border-radius: 8px;
+    padding-top: 2px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 12px;
+    text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.5;
+}
+
+.comment-info-prop-label, .comment-info-prop {
+    margin-right: 6px;
+}
+
+.comment-info-prop-label {
+    font-weight: 700;
+}
+
+.comment-info-prop {
+    font-weight: 400;
+}

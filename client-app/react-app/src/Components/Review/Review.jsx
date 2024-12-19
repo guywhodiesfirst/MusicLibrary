@@ -4,6 +4,8 @@ import { Context } from "../../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import { ReviewsApi } from "../../API/ReviewsApi";
+import { CommentsApi } from "../../API/CommentsApi"
+import CommentSection from "../CommentSection/CommentSection";
 
 
 export default function Review({ review, onReviewChange }) {
@@ -11,6 +13,45 @@ export default function Review({ review, onReviewChange }) {
     const [isLoading, setIsLoading] = useState(true);
     const [reaction, setReaction] = useState(null);
     const [likeDislikeLoading, setLikeDislikeLoading] = useState({ like: false, dislike: false });
+    const [comments, setComments] = useState([])
+    const [commentsVisible, setCommentsVisible] = useState(false)
+
+    const fetchComments = async () => {
+        try {
+            setIsLoading(true)
+            const response = await CommentsApi.getCommentsByReview(review.id)
+            if (response.success) {
+                setComments(response.comments)
+            }
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const handleSubmitComment = async (comment) => {
+        try {
+            setIsLoading(true)
+            const response = await CommentsApi.submitComment(review.id, comment);
+            console.log(response)
+            if (response.success) {
+                await fetchComments();
+                onReviewChange();
+              } else {
+                alert(response.message);
+              }
+        } catch {
+            alert("Unexpected error while trying to submit comment. Try again.");
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    const handleViewComments = async () => {
+        setCommentsVisible(true);
+        await fetchComments();
+    }
 
     const fetchUserReaction = async () => {
         if (user) {
@@ -130,8 +171,14 @@ export default function Review({ review, onReviewChange }) {
                         handleAddReaction={handleAddReaction}
                         review={review}
                         isAuthenticated={isAuthenticated}
-                        fetchUserReaction={fetchUserReaction}
-                        onReviewChange={onReviewChange}
+                        handleViewComments={handleViewComments}
+                        commentsVisible={commentsVisible}
+                    />
+                    <CommentSection
+                        comments={comments}
+                        review={review}
+                        handleCommentSubmit={handleSubmitComment}
+                        commentsVisible={commentsVisible}
                     />
                 </>
             )}
@@ -139,7 +186,7 @@ export default function Review({ review, onReviewChange }) {
     );
 }
 
-function ReactionButtons({ reaction, likeDislikeLoading, handleAddReaction, review, isAuthenticated, fetchUserReaction, onReviewChange }) {
+function ReactionButtons({ reaction, likeDislikeLoading, handleAddReaction, review, isAuthenticated, handleViewComments, commentsVisible }) {
     return (
         <div className="review-footer">
             <ActionButton
@@ -147,7 +194,8 @@ function ReactionButtons({ reaction, likeDislikeLoading, handleAddReaction, revi
                 icon={faComment}
                 label="Comments"
                 count={review.commentCount}
-                disabled={review.commentCount === 0}
+                onClick={handleViewComments}
+                disabled={commentsVisible}
             />
             {isAuthenticated && (
                 <>

@@ -42,4 +42,22 @@ export class UsersApi {
             };
         }
     }
+
+    static async getUserDetails(userId) {
+        try {
+            const response = await client(`users/${userId}/details`, {
+                method: 'GET'
+            })
+            return {
+                success: !response.error,
+                message: response.error ? response.message : undefined,
+                user: response.error ? undefined : response
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Error occurred while fetching user data. ' + error.message,
+            };
+        }
+    }
 }
