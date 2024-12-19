@@ -87,7 +87,7 @@ export class ReviewsApi {
             });
             return {
                 success: !response.error,
-                message: response.error ? response.message : "Review updated successfully",
+                message: response.error ? response.message : "Review deleted successfully",
             };
         } catch (error) {
             return {

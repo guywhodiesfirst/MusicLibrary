@@ -10,5 +10,6 @@ namespace Business.Interfaces
         Task UpdateAsync(PlaylistUpdateDto model);
         Task<bool> IsUserPlaylistOwnerAsync(Guid userId, Guid playlistId);
         Task<PlaylistDetailsDto> GetByIdWithDetailsAsync(Guid id);
+        Task<IEnumerable<PlaylistDto>> GetAllByUserIdAsync(Guid userId);
     }
 }

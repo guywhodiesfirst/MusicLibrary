@@ -1,7 +1,6 @@
 import './UserInfo.css'
 
 export default function UserInfo({ user }) {
-    console.log(user)
   return (
     <div>
       <h2>User info</h2>

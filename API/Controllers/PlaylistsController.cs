@@ -27,6 +27,14 @@ namespace API.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet("api/users/{userId}/playlists")]
+        public async Task<IActionResult> GetAllByUserId(Guid userId)
+        {
+            var result = await _playlistService.GetAllByUserIdAsync(userId);
+            return Ok(result);
+        }
+
         // GET: api/playlists/{id}
         [AllowAnonymous]
         [HttpGet("api/playlists/{id}")]

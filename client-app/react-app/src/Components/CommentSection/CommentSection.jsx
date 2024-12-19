@@ -7,8 +7,7 @@ import Comment from "../Comment/Comment";
 export default function CommentSection({
   handleCommentSubmit,
   commentsVisible,
-  comments,
-  review
+  comments
 }) {
     const { isAuthenticated } = useContext(Context);
 
@@ -32,11 +31,6 @@ export default function CommentSection({
                                 <p>No comments yet</p>
                             )    
                             }
-                        {/* {reviews.length > 0 ? (
-                            reviews.map((review) => <Review key={review.id} review={review} onReviewChange={handleReactionUpdate}/>)
-                        ) : (
-                            <p>No reviews yet.</p>
-                        )} */}
                         </div>
                     </>
                 )}

@@ -39,7 +39,7 @@ export default function UserAboutForm({ onSubmit }) {
       </div>
       {error && <p className="error">{error}</p>}
       <p>{about.length} / 500</p>
-      <button onClick={handleSubmit}>Update your info</button>
+      <button onClick={handleSubmit}>Update description</button>
     </div>
   );
 }

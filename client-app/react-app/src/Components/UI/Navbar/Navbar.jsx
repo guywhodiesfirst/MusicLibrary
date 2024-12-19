@@ -17,7 +17,10 @@ export default function Navbar() {
 
     return (
         <nav className="navbar">
-            <h1 className='navbar--logo' onClick={() => navigate("/home")}>cassette</h1>
+            <div className='navbar--logo-container' onClick={() => navigate("/home")}>
+                <img className="navbar--logo-img" src="/logo.png" alt="logo"/>
+                <h1 className='navbar--logo'>cassette</h1>
+            </div>
             <ul className="navbar--menu">
                 <li><a href="/albums">Albums</a></li>
                 {isAuthenticated && <li><a href="/me">Account</a></li>}

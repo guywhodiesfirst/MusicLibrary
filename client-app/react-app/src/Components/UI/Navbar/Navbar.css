@@ -32,7 +32,19 @@
     color: rgb(107, 189, 214);
   }
 
-  .navbar--logo {
+  .navbar--logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     cursor: pointer;
+}
+
+.navbar--logo-img {
+    width: 60px;
+    height: auto;
+    display: block;
+}
+
+.navbar--logo {
     font-size: 30px;
-  }
+}

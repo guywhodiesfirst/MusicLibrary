@@ -76,6 +76,14 @@ namespace Business.Services
                 : _mapper.Map<IEnumerable<PlaylistDto>>(playlists.OrderBy(p => p.CreatedAt));
         }
 
+        public async Task<IEnumerable<PlaylistDto>> GetAllByUserIdAsync(Guid userId)
+        {
+            var playlists = await _unitOfWork.PlaylistRepository.GetAllWithDetailsAsync();
+            var playlistsByUser = playlists.Where(p => p.UserId == userId);
+            return playlistsByUser == null ? Enumerable.Empty<PlaylistDto>()
+                : _mapper.Map<IEnumerable<PlaylistDto>>(playlistsByUser);
+        }
+
         public async Task<PlaylistDto> GetByIdAsync(Guid id)
         {
             var playlistInDb = await _unitOfWork.PlaylistRepository.GetByIdWithDetailsAsync(id);

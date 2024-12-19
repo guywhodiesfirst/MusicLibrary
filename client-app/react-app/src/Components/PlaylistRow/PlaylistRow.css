@@ -1,0 +1,32 @@
+.playlist-row {
+    background-color: rgb(43, 43, 43);
+    border-radius: 8px;
+    padding-top: 2px;
+    padding-left: 12px;
+    padding-right: 12px;
+    text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.5;
+    padding: 12px;
+}
+
+
+.playlist-title-container {
+    border-bottom: 1px solid;
+    padding-bottom: 8px;
+}
+
+.playlist-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 8px;
+}
