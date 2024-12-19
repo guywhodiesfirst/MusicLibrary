@@ -60,4 +60,24 @@ export class UsersApi {
             };
         }
     }
+
+    static async updateUserAboutSection(userId, about) {
+        try {
+            const response = await client(`users/${userId}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    about: about
+                })
+            })
+            return {
+                success: !response.error,
+                message: response.error ? response.message : "User info updated successfully"
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Error occurred while updating user data. ' + error.message,
+            };
+        }
+    }
 }

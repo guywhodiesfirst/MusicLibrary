@@ -11,8 +11,8 @@ export default function CommentForm({ onSubmit }) {
       return;
     }
 
-    if (comment.length > 500) {
-      setError("Comment cannot exceed 500 characters");
+    if (comment.length > 300) {
+      setError("Comment cannot exceed 300 characters");
       return;
     }
 
