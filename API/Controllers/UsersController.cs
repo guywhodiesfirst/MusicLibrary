@@ -60,7 +60,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPut("{userId}")]
-        public async Task<IActionResult> Update(Guid userId, UserDto model)
+        public async Task<IActionResult> Update(Guid userId, UserUpdateDto model)
         {
             var currentUserId = _controllerHelper.GetCurrentUserId();
             if (currentUserId == Guid.Empty)

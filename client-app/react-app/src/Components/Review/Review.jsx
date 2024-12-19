@@ -6,6 +6,7 @@ import { faComment, faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg
 import { ReviewsApi } from "../../API/ReviewsApi";
 import { CommentsApi } from "../../API/CommentsApi"
 import CommentSection from "../CommentSection/CommentSection";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Review({ review, onReviewChange }) {
@@ -15,6 +16,8 @@ export default function Review({ review, onReviewChange }) {
     const [likeDislikeLoading, setLikeDislikeLoading] = useState({ like: false, dislike: false });
     const [comments, setComments] = useState([])
     const [commentsVisible, setCommentsVisible] = useState(false)
+
+    const navigate = useNavigate();
 
     const fetchComments = async () => {
         try {
@@ -28,6 +31,10 @@ export default function Review({ review, onReviewChange }) {
         } finally {
             setIsLoading(false)
         }
+    }
+
+    const handleGoToProfile = () => {
+        navigate(`/users/${review.userId}`);
     }
 
     const handleSubmitComment = async (comment) => {
@@ -142,8 +149,13 @@ export default function Review({ review, onReviewChange }) {
             <div className="review-info">
                 <p>
                     <span className="review-info-prop-label">by</span>
-                    <span className="review-info-prop">{review.username} •</span>
-                    <span className="review-info-prop-label">Rating:</span>
+                    <span 
+                        className="review-info-prop username"
+                        onClick={handleGoToProfile}
+                    >
+                        {review.username}
+                    </span>
+                    <span className="review-info-prop-label">• Rating:</span>
                     <span className="review-info-prop">{review.rating}/10</span>
                 </p>
                 <p>

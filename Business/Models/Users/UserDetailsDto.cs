@@ -15,8 +15,5 @@ namespace Business.Models.Users
         public bool IsAdmin { get; set; }
         public bool IsBlocked { get; set; }
         public string About { get; set; }
-        public ICollection<ReviewDto> Reviews { get; set; }
-        public ICollection<PlaylistDto> Playlists { get; set; }
-        public ICollection<CommentDto> Comments { get; set; }
     }
 }

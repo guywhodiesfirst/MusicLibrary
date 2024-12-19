@@ -60,9 +60,6 @@ namespace Business
                 .ReverseMap();
 
             CreateMap<User, UserDetailsDto>()
-                .ForMember(dto => dto.Reviews, u => u.MapFrom(x => x.Reviews))
-                .ForMember(dto => dto.Comments, u => u.MapFrom(x => x.Comments))
-                .ForMember(dto => dto.Playlists, u => u.MapFrom(x => x.Playlists))
                 .ForMember(dto => dto.CommentCount, u => u.MapFrom(x => x.Comments.Count))
                 .ForMember(dto => dto.PlaylistCount, u => u.MapFrom(x => x.Playlists.Count))
                 .ForMember(dto => dto.ReviewCount, u => u.MapFrom(x => x.Reviews.Count))

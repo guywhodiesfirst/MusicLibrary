@@ -70,3 +70,13 @@ textarea {
   margin-bottom: 10px;
   max-width: 700px;
 }
+
+.username {
+  color: #cfb000;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.username:hover {
+  color: #9e7d20;
+}

@@ -54,15 +54,15 @@ namespace Business.Services
                 : _mapper.Map<UserDetailsDto>(userInDb);
         }
 
-        public async Task UpdateAsync(UserDto model)
+        public async Task UpdateAsync(UserUpdateDto model)
         {
             if (model == null)
                 throw new ArgumentNullException("Model can't be null");
             var userInDb = await _unitOfWork.UserRepository.GetByIdAsync(model.Id);
             if (userInDb == null)
                 throw new MusicLibraryException("User not found");
-            var user = _mapper.Map<User>(model);
-            await _unitOfWork.UserRepository.UpdateAsync(user);
+            userInDb.About = model.About;
+            await _unitOfWork.UserRepository.UpdateAsync(userInDb);
             await _unitOfWork.SaveChangesAsync();
         }
     }
