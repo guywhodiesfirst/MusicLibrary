@@ -2,7 +2,6 @@ import { client } from "./client";
 
 export class CommentsApi {
     static async submitComment(reviewId, comment) {
-        console.log(reviewId, comment)
         try {
             const response = await client(`reviews/${reviewId}/comments`, {
                 method: 'POST',
@@ -10,7 +9,6 @@ export class CommentsApi {
                     content: comment
                 })
             });
-            console.log(response)
             return {
                 success: !response.error,
                 message: response.error ? response.message : "Comment submitted!"

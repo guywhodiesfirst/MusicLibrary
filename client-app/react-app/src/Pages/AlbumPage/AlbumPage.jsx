@@ -49,7 +49,6 @@ export default function AlbumPage() {
     try {
       setIsLoading(true)
       const response = await ReviewsApi.getReviewsByAlbum(id);
-      console.log(response)
       if (response.success) {
         setReviews(response.reviews);
       } else {

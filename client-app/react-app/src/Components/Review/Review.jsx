@@ -34,7 +34,6 @@ export default function Review({ review, onReviewChange }) {
         try {
             setIsLoading(true)
             const response = await CommentsApi.submitComment(review.id, comment);
-            console.log(response)
             if (response.success) {
                 await fetchComments();
                 onReviewChange();
@@ -117,13 +116,10 @@ export default function Review({ review, onReviewChange }) {
     const handleAddReaction = async (isLike) => {
         setIsLoading(true)
         if (reaction && reaction.isLike === isLike) {
-            console.log("remove")
             await removeReaction();
         } else if (reaction && reaction.isLike !== isLike) {
             await updateReaction()
-            console.log("update");
         } else {
-            console.log("add")
             await addReaction(isLike);
         }
         onReviewChange()
@@ -134,8 +130,6 @@ export default function Review({ review, onReviewChange }) {
     useEffect(() => {
         setIsLoading(true)
         fetchUserReaction();
-        console.log(review.likes)
-        console.log(review.dislikes)
         setIsLoading(false);
     }, [user, review.id]);
 

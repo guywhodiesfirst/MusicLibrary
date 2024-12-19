@@ -4,6 +4,7 @@ import "./ReviewForm.css";
 export default function ReviewForm({ userReview, onSubmit, onUpdate, onDelete }) {
   const [content, setContent] = useState(userReview?.content || "");
   const [rating, setRating] = useState(userReview?.rating || 1);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (userReview) {
@@ -13,18 +14,35 @@ export default function ReviewForm({ userReview, onSubmit, onUpdate, onDelete })
   }, [userReview]);
 
   const handleSubmit = () => {
+    if (content.length > 3000) {
+      setError("Review content cannot exceed 3000 characters.");
+      return;
+    }
+
     const reviewData = { content, rating };
     userReview ? onUpdate(reviewData) : onSubmit(reviewData);
+
     if (!userReview) {
       setContent("");
       setRating(1);
     }
+    setError("");
+  };
+
+  const handleContentChange = (e) => {
+    const value = e.target.value;
+    if (value.length <= 3000) {
+      setContent(value);
+      setError("");
+    } else {
+      setError("Review content cannot exceed 3000 characters.");
+    }
   };
 
   const handleDelete = () => {
-    onDelete()
-    setContent('')
-  }
+    onDelete();
+    setContent("");
+  };
 
   return (
     <div className="review-form">
@@ -32,11 +50,13 @@ export default function ReviewForm({ userReview, onSubmit, onUpdate, onDelete })
       <div className="form-data">
         <textarea
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={handleContentChange}
           placeholder="Write your review here (optional)..."
           rows="15"
           cols="50"
         ></textarea>
+        {error && <p className="error">{error}</p>}
+        <p className="char-count">{content.length} / 3000</p>
         <br />
         <label className="rating-label">Rating:</label>
         <select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
@@ -49,7 +69,11 @@ export default function ReviewForm({ userReview, onSubmit, onUpdate, onDelete })
       </div>
       <br />
       <button onClick={handleSubmit}>{userReview ? "Update Review" : "Submit Review"}</button>
-      {userReview && <button onClick={handleDelete} style={{marginLeft: "10px"}}>Delete Review</button>}
+      {userReview && (
+        <button onClick={handleDelete} style={{ marginLeft: "10px" }}>
+          Delete Review
+        </button>
+      )}
     </div>
   );
 }
