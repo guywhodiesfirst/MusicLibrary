@@ -10,6 +10,7 @@ import Navbar from './Components/UI/Navbar/Navbar';
 import AlbumPage from './Pages/AlbumPage/AlbumPage';
 import ProfilePage from './Pages/ProfilePage/ProfilePage';
 import PlaylistCreatePage from './Pages/PlaylistCreatePage/PlaylistCreatePage'
+import PlaylistPage from './Pages/PlaylistPage/PlaylistPage'
 
 export const Context = React.createContext();
 
@@ -73,6 +74,7 @@ function App() {
           <Route path="/users/:id" element={<ProfilePage />}/>
           {user && <Route path="/me" element= {<Navigate to={`/users/${user.id}`}/>}/>}
           {isAuthenticated && <Route path="/createPlaylist" element={<PlaylistCreatePage />}/>}
+          <Route path="/playlists/:id" element={<PlaylistPage/>}/>
         </Routes>
       </div>
     </Context.Provider>

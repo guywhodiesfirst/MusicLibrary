@@ -1,0 +1,6 @@
+.albums-list {
+    display: flex;
+    margin-top: 16px;
+    flex-direction: column;
+    gap: 10px;
+}

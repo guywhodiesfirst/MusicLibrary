@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./PlaylistForm.css";
 
-export default function PlaylistForm({ onSubmit }) {
+export default function PlaylistForm({ onSubmit, infoText}) {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -49,7 +49,7 @@ export default function PlaylistForm({ onSubmit }) {
 
   return (
     <div className="playlist-form">
-      <h2>Create Playlist</h2>
+      <h2>{infoText} Playlist</h2>
       <div className="playlist-form-data">
         <input
             type="text"
@@ -70,7 +70,7 @@ export default function PlaylistForm({ onSubmit }) {
         {error && <p className="error">{error}</p>}
       </div>
       <br />
-      <button onClick={handleSubmit}>Create</button>
+      <button onClick={handleSubmit}>{infoText}</button>
     </div>
   );
 }

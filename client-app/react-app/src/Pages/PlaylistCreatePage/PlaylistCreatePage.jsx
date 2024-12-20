@@ -46,7 +46,9 @@ export default function PlaylistCreatePage() {
     return(
         <div className="playlist-create-page">
             <div className="playlist-create-wrapper">
-                <PlaylistForm onSubmit={handlePlaylistCreate}/>
+                <div className="playlist-create-form-container ">
+                    <PlaylistForm onSubmit={handlePlaylistCreate} infoText={"Create"}/>
+                </div>
             </div>
         </div>
     )

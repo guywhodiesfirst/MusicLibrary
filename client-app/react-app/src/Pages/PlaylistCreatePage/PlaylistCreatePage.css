@@ -7,3 +7,7 @@
 .playlist-create-wrapper {
     max-width: 1200px;
 }
+
+.playlist-create-form-container {
+    width: 800px;
+}

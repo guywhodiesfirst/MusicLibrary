@@ -55,6 +55,24 @@ export class PlaylistApi {
         }
     }
 
+    static async getByIdWithAlbums(playlistId) {
+        try {
+            const response = await client(`playlists/${playlistId}/details`, {
+                method: 'GET',
+            });
+            return {
+                success: !response.error,
+                message: response.error ? response.message : undefined,
+                playlist: response.error ? undefined : response
+            }
+        } catch(error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
+
     static async updatePlaylist(playlistId, updatedPlaylist) {
         try {
             const response = await client(`playlists/${playlistId}`, {

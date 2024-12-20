@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { AlbumsApi } from '../../API/AlbumsApi'
-import AlbumSearchRow from '../AlbumSearchRow/AlbumSearchRow'
 
 export default function AlbumSearch({ onAlbumsFetched }) {
   const [query, setQuery] = useState('');

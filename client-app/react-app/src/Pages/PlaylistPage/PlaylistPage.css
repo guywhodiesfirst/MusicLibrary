@@ -1,0 +1,32 @@
+.playlist-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.playlist-wrapper {
+    max-width: 1200px;
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 2fr 3fr;
+}
+
+.playlist-info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tab-btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.not-active {
+    opacity: 0.5;
+}
+
+.not-active:hover {
+    opacity: 1;
+}

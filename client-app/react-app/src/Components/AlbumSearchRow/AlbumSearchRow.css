@@ -1,7 +1,12 @@
 .search-row {
-    padding: 10px 0;
-    border-bottom: 1px solid #ccc;
+    padding: 10px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: rgb(43, 43, 43);
+    border-radius: 10px;
+}
+
+.search-row-info {
+    padding-right: 8px;
 }
