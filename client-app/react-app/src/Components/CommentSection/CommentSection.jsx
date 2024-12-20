@@ -9,7 +9,7 @@ export default function CommentSection({
   commentsVisible,
   comments
 }) {
-    const { isAuthenticated } = useContext(Context);
+    const { isAuthenticated, isBlocked } = useContext(Context);
 
     return (
         <div>
@@ -18,12 +18,15 @@ export default function CommentSection({
                     <>
                         <h3>Comments</h3>
                         {isAuthenticated ? (
-                            <CommentForm
-                                    onSubmit={handleCommentSubmit}
-                                />
+                            isBlocked ? (
+                                <div className="content-blocked">You were blocked from posting by the administrator.</div>
                             ) : (
-                                <h3>Please authorize to comment</h3>
+                                <CommentForm onSubmit={handleCommentSubmit} />
+                            )
+                        ) : (
+                            <h3>Please authorize to comment</h3>
                         )}
+
                         <div className="comments-list">
                             {comments.length > 0 ? (
                                 comments.map((comment) => <Comment key={comment.id} comment={comment}/>)

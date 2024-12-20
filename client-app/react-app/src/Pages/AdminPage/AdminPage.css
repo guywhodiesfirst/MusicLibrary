@@ -1,0 +1,32 @@
+.admin-page {
+    display: grid;
+    gap: 4rem;
+    margin: 2rem;
+    grid-template-columns: 20% 70%;
+    width: 80vw;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.main-content > div {
+    margin-top: 0;
+}
+
+.table th {
+    background-color: rgb(15, 15, 15);
+    padding: 3px;
+}
+
+.table td {
+    background-color: rgb(43, 43, 43);
+    padding: 4px;
+}
+
+.table button {
+    width: 100px;
+}

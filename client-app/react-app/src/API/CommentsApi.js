@@ -38,4 +38,23 @@ export class CommentsApi {
             }
         }
     }
+
+    static async getAll() {
+            try {
+                const response = await client(`reviews/comments`, {
+                    method: 'GET'
+                })
+                console.log(response)
+                return {
+                    success: !response.error,
+                    message: response.error ? response.message : undefined,
+                    comments: response.error ? undefined : response
+                }
+            } catch (error) {
+                return {
+                    success: false,
+                    message: 'Error occurred while fetching comments.'
+                };
+            }
+        }
 }

@@ -80,3 +80,7 @@ textarea {
 .username:hover {
   color: #9e7d20;
 }
+
+.content-blocked {
+  color: grey;
+}

@@ -17,7 +17,12 @@ export default function Comment({ comment }) {
                 <span className='comment-info-prop-label'>• Created at</span>
                 <span className='comment-info-prop'>{new Date(comment.createdAt).toLocaleString()}</span>
             </p>
-            <p>{comment.content}</p>
+            {comment.isDeleted ? (
+                <p className='content-blocked'>Comment was blocked from viewing by the administrator.</p>
+            ) : (
+                <p>{comment.content}</p>
+            )
+            }
         </div>
     )
 }

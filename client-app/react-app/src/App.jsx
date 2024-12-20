@@ -11,6 +11,7 @@ import AlbumPage from './Pages/AlbumPage/AlbumPage';
 import ProfilePage from './Pages/ProfilePage/ProfilePage';
 import PlaylistCreatePage from './Pages/PlaylistCreatePage/PlaylistCreatePage'
 import PlaylistPage from './Pages/PlaylistPage/PlaylistPage'
+import AdminPage from './Pages/AdminPage/AdminPage';
 
 export const Context = React.createContext();
 
@@ -25,6 +26,8 @@ export default function AppWrapper() {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [isBlocked, setIsBlocked] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
@@ -48,8 +51,9 @@ function App() {
         setIsAuthenticated(false);
         setUser(null);
       } else {
-        console.log(result.data);
         setUser(result.data);
+        setIsBlocked(result.data.isBlocked === true);
+        setIsAdmin(result.data.isAdmin === true)
         setIsAuthenticated(true);
       }
     }
@@ -60,7 +64,7 @@ function App() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <Context.Provider value={{ isAuthenticated, setIsAuthenticated, user }}>
+    <Context.Provider value={{ isAuthenticated, setIsAuthenticated, user, isBlocked, isAdmin }}>
       {!isHomePage && <Navbar />}
         <div className='wrapper'>
         <Routes>
@@ -72,9 +76,10 @@ function App() {
           <Route path="/albums" element={<AlbumSearchPage />} />
           <Route path="/albums/:id" element={<AlbumPage />} />
           <Route path="/users/:id" element={<ProfilePage />}/>
-          {user && <Route path="/me" element= {<Navigate to={`/users/${user.id}`}/>}/>}
-          {isAuthenticated && <Route path="/createPlaylist" element={<PlaylistCreatePage />}/>}
           <Route path="/playlists/:id" element={<PlaylistPage/>}/>
+          {user && <Route path="/me" element= {<Navigate to={`/users/${user.id}`}/>}/>}
+          {isAuthenticated && !isBlocked && <Route path="/createPlaylist" element={<PlaylistCreatePage />}/>}
+          {isAuthenticated && isAdmin && <Route path="admin" element={<AdminPage/>}/>}
         </Routes>
       </div>
     </Context.Provider>

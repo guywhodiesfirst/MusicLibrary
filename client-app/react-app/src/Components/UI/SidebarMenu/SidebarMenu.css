@@ -1,0 +1,32 @@
+.sidebar {
+    width: 200px;
+    padding: 10px;
+    background-color: rgb(15, 15, 15);
+    height: fit-content;
+    border-radius: 10px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+.menu-item:hover {
+    background-color: rgb(70, 70, 70);
+}
+
+.menu-item.active {
+    background-color: rgb(43, 43, 43);
+}
+
+.icon {
+    margin-right: 10px;
+    font-size: 18px;
+}

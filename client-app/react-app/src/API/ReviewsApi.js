@@ -26,6 +26,25 @@ export class ReviewsApi {
         }
     }
 
+    static async getAll() {
+        try {
+            const response = await client(`reviews`, {
+                method: 'GET'
+            })
+            console.log(response)
+            return {
+                success: !response.error,
+                message: response.error ? response.message : undefined,
+                reviews: response.error ? undefined : response
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Error occurred while fetching reviews.'
+            };
+        }
+    }
+
     static async getReviewsByAlbum(albumId) {
         try {
             const response = await client(`albums/${albumId}/reviews`, {

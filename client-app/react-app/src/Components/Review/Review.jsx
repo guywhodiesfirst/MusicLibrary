@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Review({ review, onReviewChange }) {
-    const { isAuthenticated, user } = useContext(Context);
+    const { isAuthenticated, user, isBlocked } = useContext(Context);
     const [isLoading, setIsLoading] = useState(true);
     const [reaction, setReaction] = useState(null);
     const [likeDislikeLoading, setLikeDislikeLoading] = useState({ like: false, dislike: false });
@@ -169,7 +169,8 @@ export default function Review({ review, onReviewChange }) {
             {review.content && (
                 <>
                     <div className="review-content">
-                        <p>{review.content}</p>
+                        {review.isDeleted ? <p className="content-blocked">Review content was blocked from viewing by the administrator.</p>
+                        : <p>{review.content}</p>}
                     </div>
                     <ReactionButtons
                         reaction={reaction}

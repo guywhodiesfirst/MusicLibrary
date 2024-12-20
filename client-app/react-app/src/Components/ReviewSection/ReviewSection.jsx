@@ -15,7 +15,7 @@ export default function ReviewSection({
   handleViewReviews,
   onReviewUpdates
 }) {
-    const { isAuthenticated } = useContext(Context);
+    const { isAuthenticated, isBlocked } = useContext(Context);
 
     const handleReactionUpdate = () => {
         onReviewUpdates();
@@ -24,12 +24,15 @@ export default function ReviewSection({
     return (
         <div>
             {isAuthenticated ? (
+                isBlocked ? (
+                    <div className="content-blocked">You were blocked from posting by the administrator.</div>
+                ) : (
                 <ReviewForm
                     userReview={userReview}
                     onSubmit={handleReviewSubmit}
                     onUpdate={handleReviewUpdate}
                     onDelete={handleReviewDelete}
-                />
+                />)
             ) : (
                 <h3>Please authorize to review</h3>
             )}

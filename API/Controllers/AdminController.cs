@@ -36,6 +36,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("reviews/{reviewId}/block")]
         public async Task<IActionResult> BlockReview(Guid reviewId)
         {
@@ -53,6 +54,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("comments/{commentId}/block")]
         public async Task<IActionResult> BlockComment(Guid commentId)
         {
@@ -70,6 +72,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("users/{userId}/unblock")]
         public async Task<IActionResult> UnblockUser(Guid userId)
         {
@@ -87,6 +90,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("reviews/{reviewId}/unblock")]
         public async Task<IActionResult> UnblockReview(Guid reviewId)
         {
@@ -104,6 +108,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("comments/{commentId}/unblock")]
         public async Task<IActionResult> UnblockComment(Guid commentId)
         {
