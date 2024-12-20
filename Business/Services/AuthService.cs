@@ -81,8 +81,8 @@ namespace Business.Services
 
         public async Task Register(RegistrationRequestDto request)
         {
-            var userInDb = await _unitOfWork.UserRepository.GetByEmailAsync(request.Email);
-            if (userInDb != null)
+            var userByEmail = await _unitOfWork.UserRepository.GetByEmailAsync(request.Email);
+            if (userByEmail != null)
                 throw new MusicLibraryException("User already exists!");
 
             var user = _mapper.Map<User>(request);

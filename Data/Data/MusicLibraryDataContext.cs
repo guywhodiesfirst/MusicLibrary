@@ -58,14 +58,5 @@ namespace Data.Data
                 .Property(c => c.Content)
                 .IsRequired();
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-
-            optionsBuilder
-                .LogTo(Console.WriteLine)   // Логування до консолі
-                .EnableSensitiveDataLogging();  // Дозволяє бачити SQL-запити для відлагодження
-        }
     }
 }

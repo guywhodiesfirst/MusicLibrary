@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
@@ -22,10 +22,11 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddDbContext<MusicLibraryDataContext>(options =>
 {
-    options.UseSqlite(
+    options.UseNpgsql(
         builder.Configuration["ConnectionStrings:DefaultConnection"]
     );
 });
+
 builder.Services.AddHttpClient<IMusicBrainzQueryService, MusicBrainzQueryService>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["MusicBrainz:BaseUrl"]!);
