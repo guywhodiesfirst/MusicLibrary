@@ -1,0 +1,9 @@
+.playlist-create-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.playlist-create-wrapper {
+    max-width: 1200px;
+}

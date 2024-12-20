@@ -1,0 +1,28 @@
+.playlist-form-data .playlist-name-input,
+.playlist-form-data .playlist-description-input {
+  width: 100%;
+  padding: 10px;
+  max-width: 600px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.playlist-form-data p {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.playlist-name-input {
+    margin-bottom: 16px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+.playlist-form {
+    width: 800px;
+}
