@@ -60,6 +60,7 @@ builder.Services.AddAutoMapper(typeof(AutomapperProfile).Assembly);
 builder.Services.AddScoped<IControllerHelper, ControllerHelper>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICommentService, CommentService>();

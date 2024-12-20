@@ -9,5 +9,9 @@ namespace Business.Models.Auth
         public string AccessToken { get; set; }
         [JsonPropertyName("expires_in")]
         public int ExpiresIn { get; set; }
+        [JsonPropertyName("is_admin")]
+        public bool IsAdmin { get; set; }
+        [JsonPropertyName("is_blocked")]
+        public bool IsBlocked { get; set; }
     }
 }

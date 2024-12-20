@@ -11,6 +11,7 @@
         public int Dislikes { get; set; }
         public string Content { get; set; }
         public int CommentCount { get; set; }
+        public bool IsDeleted { get; set; }
         public DateTime LastUpdatedAt { get; set; }
         public DateTime CreatedAt { get; set; }
     }

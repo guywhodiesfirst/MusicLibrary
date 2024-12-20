@@ -15,4 +15,9 @@ public class ControllerHelper : IControllerHelper
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         return userId == null ? Guid.Empty : Guid.Parse(userId);
     }
+    public bool IsCurrentUserAdmin()
+    {
+        var userRole = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);
+        return userRole != null && userRole.Equals("Admin", StringComparison.OrdinalIgnoreCase);
+    }
 }

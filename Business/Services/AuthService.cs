@@ -43,15 +43,21 @@ namespace Business.Services
             var key = _configuration["JwtConfig:Key"];
             var tokenValidityMins = int.Parse(_configuration["JwtConfig:TokenValidityMins"]);
             var tokenExpiryTimeStamp = DateTime.UtcNow.AddMinutes(tokenValidityMins);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()),
+                new Claim(ClaimTypes.Name, userAccount.Username),
+                new Claim(ClaimTypes.Email, userAccount.Email),
+                new Claim("IsBlocked", userAccount.IsBlocked.ToString())
+            };
 
+            if (userAccount.IsAdmin)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            }
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()),
-                    new Claim(ClaimTypes.Name, userAccount.Username),
-                    new Claim(ClaimTypes.Email, userAccount.Email)
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = tokenExpiryTimeStamp,
                 Audience = audience,
                 Issuer = issuer,
@@ -67,13 +73,14 @@ namespace Business.Services
             {
                 AccessToken = accessToken,
                 Username = userAccount.Username,
-                ExpiresIn = (int)tokenExpiryTimeStamp.Subtract(DateTime.UtcNow).TotalSeconds
+                ExpiresIn = (int)tokenExpiryTimeStamp.Subtract(DateTime.UtcNow).TotalSeconds,
+                IsAdmin = userAccount.IsAdmin,
+                IsBlocked = userAccount.IsBlocked
             };
         }
 
         public async Task Register(RegistrationRequestDto request)
         {
-            // TODO: add model validation
             var userInDb = await _unitOfWork.UserRepository.GetByEmailAsync(request.Email);
             if (userInDb != null)
                 throw new MusicLibraryException("User already exists!");
